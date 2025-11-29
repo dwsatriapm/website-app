@@ -1,4 +1,6 @@
-<?php require_once('../_header.php') ?>
+<?php 
+require_once('db_connect.php');
+require_once('../_header.php') ?>
 
 <div class="main-content" id="id_order">
    <div class="container">

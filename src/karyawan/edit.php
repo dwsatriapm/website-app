@@ -1,4 +1,5 @@
 <?php
+require_once('db_connect.php');
 require_once('../_header.php');
 $id_user = $_GET['id_user'];
 $update = query("SELECT * FROM master WHERE id_user='$id_user'")[0];

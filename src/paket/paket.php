@@ -1,4 +1,6 @@
-<?php require_once('../_header.php'); ?>
+<?php 
+require_once('db_connect.php');
+require_once('../_header.php'); ?>
 
 <div id="paket" class="main-content">
 	<div class="container">

@@ -1,4 +1,6 @@
-<?php require_once('../../_functions.php');
+<?php 
+require_once('db_connect.php');
+require_once('../../_functions.php');
 $nomor_or = $_GET['or_ck_number'];
 $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
 

@@ -1,4 +1,5 @@
 <?php
+require_once('db_connect.php');
 require_once('../../_header.php');
 $id_cs = $_GET['id_cs'];
 $data_cs = query("SELECT * FROM tb_cuci_satuan WHERE id_cs = '$id_cs'")[0];

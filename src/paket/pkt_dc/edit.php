@@ -1,4 +1,5 @@
 <?php
+require_once('db_connect.php');
 require_once('../../_header.php');
 $id_dc = $_GET['id_dc'];
 $data_dc = query("SELECT * FROM tb_dry_clean WHERE id_dc = '$id_dc'")[0];

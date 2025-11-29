@@ -1,4 +1,6 @@
-<?php require_once('_header.php') ?>
+<?php 
+require_once('db_connect.php');
+require_once('_header.php') ?>
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <div id="about" class="main-content">
    <div class="container">

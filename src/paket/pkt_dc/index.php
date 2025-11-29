@@ -1,4 +1,6 @@
-<?php require_once('../../_functions.php'); ?>
+<?php 
+require_once('db_connect.php');
+require_once('../../_functions.php'); ?>
 <!DOCTYPE html>
 <html lang="id">
 

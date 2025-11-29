@@ -1,4 +1,5 @@
 <?php
+require_once('db_connect.php');
 require_once('../_header.php');
 
 if (!isset($_GET['type']) || !isset($_GET['id'])) {

@@ -1,4 +1,5 @@
 <?php
+require_once('db_connect.php');
 require_once('../../_header.php');
 $data_cs = query('SELECT * FROM tb_cuci_satuan');
 ?>

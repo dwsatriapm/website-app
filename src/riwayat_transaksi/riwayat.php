@@ -1,4 +1,5 @@
 <?php
+require_once('db_connect.php');
 require_once('../_header.php');
 $query_ck = query("SELECT * FROM tb_riwayat_ck ORDER BY id_ck DESC");
 $query_dc = query("SELECT * FROM tb_riwayat_dc ORDER BY id_dc DESC");

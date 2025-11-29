@@ -1,4 +1,6 @@
-<?php require_once('../_header.php') ?>
+<?php 
+require_once('db_connect.php');
+require_once('../_header.php') ?>
 
 <?php if (isset($_POST['tambah_karyawan'])) : ?>
 	<?php if (add_kary($_POST) > 0) : ?>
