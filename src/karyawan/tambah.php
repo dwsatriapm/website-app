@@ -1,5 +1,4 @@
 <?php 
-require_once('db_connect.php');
 require_once('../_header.php') ?>
 
 <?php if (isset($_POST['tambah_karyawan'])) : ?>

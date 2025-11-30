@@ -1,5 +1,4 @@
 <?php
-require_once('db_connect.php');
 require_once('../../_header.php');
 $id_ck = $_GET['id_ck'];
 $data_ck = query("SELECT * FROM tb_cuci_komplit WHERE id_ck = '$id_ck'")[0];

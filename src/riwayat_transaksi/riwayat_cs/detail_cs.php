@@ -1,5 +1,4 @@
 <?php
-require_once('db_connect.php');
 require_once('../../_header.php');
 $get_id = $_GET['id_cs'];
 $data = query("SELECT * FROM tb_riwayat_cs WHERE id_cs = $get_id")[0];

@@ -1,5 +1,4 @@
 <?php
-require_once('db_connect.php');
 require_once('../_header.php');
 $ck_number = $_GET['or_ck_number'];
 ?>

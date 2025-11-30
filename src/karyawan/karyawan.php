@@ -1,5 +1,4 @@
 <?php
-require_once('db_connect.php');
 require_once('../_header.php');
 $data_karyawan = query('SELECT * FROM master LIMIT 20 OFFSET 1');
 ?>

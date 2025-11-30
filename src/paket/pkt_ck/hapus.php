@@ -1,5 +1,4 @@
 <?php
-require_once('db_connect.php');
 require_once('../../_header.php');
 $id_ck = $_GET['id_ck'];
 ?>

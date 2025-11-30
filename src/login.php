@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once('db_connect.php');
 require_once __DIR__ . '/_functions.php';
 ?>
 <!DOCTYPE html>

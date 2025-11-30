@@ -1,5 +1,4 @@
 <?php
-require_once('db_connect.php');
 require_once('../../_header.php');
 $no_ck = $_GET['or_ck_number'];
 $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$no_ck'")[0];
