@@ -1537,3 +1537,24 @@ span.ov_tgl {
 	color: var(--primary-light);
 	transform: translateY(-2px);
 }
+
+/* Style untuk Status Tambahan */
+.status-lunas {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-process {
+    background-color: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}

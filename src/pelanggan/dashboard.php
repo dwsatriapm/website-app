@@ -1,32 +1,44 @@
 <?php
-$page_title = "Dashboard Pelanggan";
+ $page_title = "Dashboard Pelanggan";
 require_once('_header_pelanggan.php');
 
-$id_pelanggan = $user['id'];
+ $id_pelanggan = $user['id'];
 
-// Hitung statistik order pelanggan
-$total_order_ck = count(query("SELECT * FROM tb_order_ck WHERE id_pelanggan = '$id_pelanggan'"));
-$total_order_dc = count(query("SELECT * FROM tb_order_dc WHERE id_pelanggan = '$id_pelanggan'"));
-$total_order_cs = count(query("SELECT * FROM tb_order_cs WHERE id_pelanggan = '$id_pelanggan'"));
-$total_order = $total_order_ck + $total_order_dc + $total_order_cs;
+// --- AMBIL SEMUA DATA (AKTIF + RIWAYAT) ---
 
-// Hitung riwayat transaksi
-$total_riwayat_ck = count(query("SELECT * FROM tb_riwayat_ck WHERE id_pelanggan = '$id_pelanggan'"));
-$total_riwayat_dc = count(query("SELECT * FROM tb_riwayat_dc WHERE id_pelanggan = '$id_pelanggan'"));
-$total_riwayat_cs = count(query("SELECT * FROM tb_riwayat_cs WHERE id_pelanggan = '$id_pelanggan'"));
-$total_riwayat = $total_riwayat_ck + $total_riwayat_dc + $total_riwayat_cs;
+// 1. Ambil order aktif (belum dibayar)
+ $order_ck = query("SELECT 'CK' as tipe, or_ck_number as no_order, jenis_paket_ck as paket, tot_bayar as total, tgl_masuk_ck as tgl_masuk, 'Menunggu Pembayaran' as status FROM tb_order_ck WHERE id_pelanggan = '$id_pelanggan'");
+ $order_dc = query("SELECT 'DC' as tipe, or_dc_number as no_order, jenis_paket_dc as paket, tot_bayar as total, tgl_masuk_dc as tgl_masuk, 'Menunggu Pembayaran' as status FROM tb_order_dc WHERE id_pelanggan = '$id_pelanggan'");
+ $order_cs = query("SELECT 'CS' as tipe, or_cs_number as no_order, jenis_paket_cs as paket, tot_bayar as total, tgl_masuk_cs as tgl_masuk, 'Menunggu Pembayaran' as status FROM tb_order_cs WHERE id_pelanggan = '$id_pelanggan'");
 
-// Ambil order terbaru (belum dibayar)
-$order_terbaru = [];
-$order_ck = query("SELECT 'CK' as tipe, or_ck_number as no_order, jenis_paket_ck as paket, tot_bayar as total, tgl_masuk_ck as tgl_masuk FROM tb_order_ck WHERE id_pelanggan = '$id_pelanggan' ORDER BY id_order_ck DESC LIMIT 5");
-$order_dc = query("SELECT 'DC' as tipe, or_dc_number as no_order, jenis_paket_dc as paket, tot_bayar as total, tgl_masuk_dc as tgl_masuk FROM tb_order_dc WHERE id_pelanggan = '$id_pelanggan' ORDER BY id_order_dc DESC LIMIT 5");
-$order_cs = query("SELECT 'CS' as tipe, or_cs_number as no_order, jenis_paket_cs as paket, tot_bayar as total, tgl_masuk_cs as tgl_masuk FROM tb_order_cs WHERE id_pelanggan = '$id_pelanggan' ORDER BY id_order_cs DESC LIMIT 5");
+// 2. Ambil riwayat (sudah dibayar/selesai)
+ $riwayat_ck = query("SELECT 'CK' as tipe, or_number as no_order, j_paket as paket, total, tgl_msk as tgl_masuk, status FROM tb_riwayat_ck WHERE id_pelanggan = '$id_pelanggan'");
+ $riwayat_dc = query("SELECT 'DC' as tipe, or_number as no_order, j_paket as paket, total, tgl_msk as tgl_masuk, status FROM tb_riwayat_dc WHERE id_pelanggan = '$id_pelanggan'");
+ $riwayat_cs = query("SELECT 'CS' as tipe, or_number as no_order, j_paket as paket, total, tgl_msk as tgl_masuk, status FROM tb_riwayat_cs WHERE id_pelanggan = '$id_pelanggan'");
 
-$order_terbaru = array_merge($order_ck, $order_dc, $order_cs);
-usort($order_terbaru, function($a, $b) {
-    return strtotime($b['tgl_masuk']) - strtotime($a['tgl_masuk']);
+// 3. Gabungkan semua data
+ $semua_transaksi = array_merge($order_ck, $order_dc, $order_cs, $riwayat_ck, $riwayat_dc, $riwayat_cs);
+
+// 4. Urutkan berdasarkan tanggal
+usort($semua_transaksi, function($a, $b) {
+    $dateA = $a['tgl_masuk'];
+    $dateB = $b['tgl_masuk'];
+    return strtotime($dateB) - strtotime($dateA);
 });
-$order_terbaru = array_slice($order_terbaru, 0, 5);
+
+// 5. Ambil 5 transaksi terbaru untuk ditampilkan
+ $order_terbaru = array_slice($semua_transaksi, 0, 5);
+
+// Hitung ulang statistik
+ $total_order = 0;
+ $total_riwayat = 0;
+foreach ($semua_transaksi as $trans) {
+    if ($trans['status'] === 'Menunggu Pembayaran') {
+        $total_order++;
+    } else {
+        $total_riwayat++;
+    }
+}
 ?>
 
 <div class="main-content">
@@ -51,7 +63,7 @@ $order_terbaru = array_slice($order_terbaru, 0, 5);
                     <div class="card-body">
                         <div class="card-panel">
                             <div class="panel-header">
-                                <p>Total Order Aktif</p>
+                                <p>Order Aktif</p>
                                 <h2><?= $total_order ?></h2>
                             </div>
                             <div class="panel-icon">
@@ -101,7 +113,7 @@ $order_terbaru = array_slice($order_terbaru, 0, 5);
                 <div class="card">
                     <div class="card-title card-flex">
                         <div class="card-col">
-                            <h2>Order Terbaru</h2>
+                            <h2>Transaksi Terbaru</h2>
                         </div>
                         <div class="card-col txt-right">
                             <a href="<?= url('pelanggan/order_saya.php') ?>" class="btn-xs bg-primary" style="color: whitesmoke;">Lihat Semua</a>
@@ -141,7 +153,18 @@ $order_terbaru = array_slice($order_terbaru, 0, 5);
                                         <td><?= $order['paket'] ?></td>
                                         <td><?= date('d/m/Y', strtotime($order['tgl_masuk'])) ?></td>
                                         <td>Rp. <?= number_format($order['total'], 0, ',', '.') ?></td>
-                                        <td><span class="status-pending">Menunggu Pembayaran</span></td>
+                                        <td>
+                                            <?php
+                                            // Tampilkan status dengan class yang sesuai
+                                            $status_class = 'status-pending';
+                                            if ($order['status'] === 'Sukses' || $order['status'] === 'Lunas') {
+                                                $status_class = 'status-lunas';
+                                            } elseif ($order['status'] === 'Diproses') {
+                                                $status_class = 'status-process';
+                                            }
+                                            ?>
+                                            <span class="<?= $status_class ?>"><?= htmlspecialchars($order['status']) ?></span>
+                                        </td>
                                     </tr>
                                     <?php endforeach ?>
                                 </tbody>
@@ -150,7 +173,7 @@ $order_terbaru = array_slice($order_terbaru, 0, 5);
                         <?php else : ?>
                         <div class="card-flex-column">
                             <img src="<?= url('assets/img/empty.png') ?>" width="150" alt="empty">
-                            <p style="color: var(--text-secondary); margin-top: 20px;">Belum ada order</p>
+                            <p style="color: var(--text-secondary); margin-top: 20px;">Belum ada transaksi</p>
                             <a href="<?= url('pelanggan/buat_order.php') ?>" class="btn-sm bg-primary" style="color: whitesmoke; margin-top: 10px;">Buat Order Sekarang</a>
                         </div>
                         <?php endif ?>
@@ -160,7 +183,6 @@ $order_terbaru = array_slice($order_terbaru, 0, 5);
         </div>
     </div>
 </div>
-
 
 </body>
 </html>

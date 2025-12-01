@@ -89,7 +89,7 @@ $pelanggan_list = query("SELECT * FROM tb_pelanggan ORDER BY created_at DESC");
                         </div>
                         <?php else : ?>
                         <div class="card-flex-column">
-                            <img src="<?= url('assets/img/empty.svg') ?>" width="150" alt="empty">
+                            <img src="<?= url('assets/img/empty.png') ?>" width="150" alt="empty">
                             <p style="color: var(--text-secondary); margin-top: 20px; font-size: 16px;">Belum ada pelanggan terdaftar</p>
                         </div>
                         <?php endif ?>
@@ -99,9 +99,5 @@ $pelanggan_list = query("SELECT * FROM tb_pelanggan ORDER BY created_at DESC");
         </div>
     </div>
 </div>
-
-<footer>
-    <p>&copy; 2025 Laundry Kami. All rights reserved.</p>
-</footer>
 </body>
 </html>
