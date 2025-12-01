@@ -1,15 +1,7 @@
 <?php 
-	require_once('_functions.php');
+require_once('_functions.php');
+require_once('_auth.php');
 
-	if (isset($_SESSION['login']) == '') {
-		echo "<script>window.location='login.php';</script>";
-	} 
-
-	session_unset();
-	session_destroy();
-	$_SESSION = [];
-
-	echo "<script>window.location='login.php';</script>";
-
-
+// Panggil fungsi logout dari _auth.php
+logout();
 ?>

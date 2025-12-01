@@ -1,12 +1,11 @@
 <?php
-session_start();
 require_once __DIR__ . '/_functions.php';
+require_once __DIR__ . '/_auth.php';
 
-if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
-    header('Location: login.php');
-    exit();
-}
+// Proteksi: Hanya Admin/Karyawan
+requireRole(['Admin', 'Karyawan']);
 
+$user = getCurrentUser();
 $jml_karyawan = count(query('SELECT * FROM master LIMIT 20 OFFSET 1'));
 
 require_once __DIR__ . '/_header.php';

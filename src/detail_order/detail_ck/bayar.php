@@ -1,8 +1,24 @@
 <?php
 require_once('../../_functions.php');
+require_once('../../_auth.php');
+
+// Cek apakah user sudah login
+if (!isLoggedIn()) {
+    header('Location: ' . url('login.php'));
+    exit;
+}
+
+$user = getCurrentUser();
 $nomor_or = $_GET['or_ck_number'];
 $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
 
+// VALIDASI: Pelanggan hanya bisa bayar order miliknya sendiri
+if (hasRole('Pelanggan')) {
+    if ($data['id_pelanggan'] != $user['id']) {
+        header('Location: ' . url('403.php'));
+        exit;
+    }
+}
 ?>
 
 <?php if (isset($_POST['bayar'])) { ?>
@@ -11,7 +27,11 @@ $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
          <div class="box">
             <img src="<?= url('/assets/img/berhasil.png') ?>" height="68" alt="alert sukses">
             <p>Pembayaran Berhasil!</p>
-            <button onclick="window.location='http://localhost:4124/riwayat_transaksi/riwayat.php'" class="btn-alert btn-success">Ok</button>
+            <?php if (hasRole('Pelanggan')) : ?>
+                <button onclick="window.location='<?= url('pelanggan/riwayat_saya.php') ?>'" class="btn-alert btn-success">Lihat Riwayat</button>
+            <?php else : ?>
+                <button onclick="window.location='<?= url('riwayat_transaksi/riwayat.php') ?>'" class="btn-alert btn-success">Ok</button>
+            <?php endif ?>
          </div>
       </div>
    <?php else : ?>
@@ -27,7 +47,6 @@ $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,9 +54,7 @@ $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
    <link rel="stylesheet" href="<?= url('/assets/css/payments.css') ?>">
    <link rel="shortcut icon" href="<?= url('/assets/img/logo/favicon.svg') ?>" type="image/x-icon">
 </head>
-
 <body>
-
    <div class="card-payment">
       <div class="icon-header">
          <img src="<?= url('/assets/img/payment.svg') ?>" alt="Icon Payment" width="178">
@@ -46,7 +63,11 @@ $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
       <div class="txt">
          <h3>No Order: <?= $data['or_ck_number'] ?></h3>
          <p>Masukkan nominal untuk melakukan transaksi</p>
+         <p style="color: var(--primary-light); font-weight: 600; margin-top: 10px;">
+            Total: Rp. <?= number_format($data['tot_bayar'], 0, ',', '.') ?>
+         </p>
       </div>
+      
       <form action="" method="post">
          <input type="hidden" name="or_number" value="<?= $data['or_ck_number'] ?>">
          <input type="hidden" name="pelanggan" value="<?= $data['nama_pel_ck'] ?>">
@@ -61,11 +82,18 @@ $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
          <input type="hidden" name="total" value="<?= $data['tot_bayar'] ?>">
          <input type="hidden" name="keterangan" value="<?= $data['keterangan_ck'] ?>">
 
-         <input type="text" name="nominal" required autofocus autocomplete="off" placeholder="Misalnya: '120000'">
-         <button type="submit" name="bayar">Bayar</button>
-         <a href="<?= url('dashboard.php') ?>" class="btn-back" style="margin-left: 10px;">← Kembali</a>
+         <input type="number" name="nominal" required autofocus autocomplete="off" 
+                placeholder="Misalnya: <?= $data['tot_bayar'] ?>" 
+                min="<?= $data['tot_bayar'] ?>">
+         
+         <button type="submit" name="bayar">Bayar Sekarang</button>
+         
+         <?php if (hasRole('Pelanggan')) : ?>
+            <a href="<?= url('pelanggan/order_saya.php') ?>" class="btn-back">← Kembali</a>
+         <?php else : ?>
+            <a href="<?= url('dashboard.php') ?>" class="btn-back">← Kembali</a>
+         <?php endif ?>
       </form>
    </div>
 </body>
-
 </html>

@@ -234,6 +234,8 @@ function order_ck($order_ck)
     $tgl_keluar = htmlspecialchars($order_ck['tgl_keluar_ck']);
     $ket = htmlspecialchars($order_ck['keterangan_ck']);
 
+    $id_pelanggan = isset($order_ck['id_pelanggan']) ? $order_ck['id_pelanggan'] : NULL;
+
     $pkt_ck = mysqli_query($koneksi, "SELECT * FROM tb_cuci_komplit WHERE nama_paket_ck = '$jns_pkt'");
     if (mysqli_num_rows($pkt_ck) === 1) {
         $result_ck = mysqli_fetch_assoc($pkt_ck);
@@ -245,12 +247,13 @@ function order_ck($order_ck)
         $limitNum = substr($str, 0, 7);
         $orderNum = 'CK-' . strtoupper($limitNum);
 
-        $insert_ck = "INSERT INTO tb_order_ck (or_ck_number, nama_pel_ck, no_telp_ck, alamat_ck, jenis_paket_ck, wkt_krj_ck, berat_qty_ck, harga_perkilo, tgl_masuk_ck, tgl_keluar_ck, tot_bayar, keterangan_ck) VALUES( 
+        $insert_ck = "INSERT INTO tb_order_ck (id_pelanggan, or_ck_number, nama_pel_ck, no_telp_ck, alamat_ck, jenis_paket_ck, wkt_krj_ck, berat_qty_ck, harga_perkilo, tgl_masuk_ck, tgl_keluar_ck, tot_bayar, keterangan_ck) VALUES( 
+            " . ($id_pelanggan ? "'$id_pelanggan'" : "NULL") . ",
             '$orderNum','$nama_pel','$no_telp','$alamat',
             '$jns_pkt','$wkt_krj_ck','$berat_qty','$tarif_perkilo',
             '$tgl_masuk','$tgl_keluar','$total_bayar',
             '$ket' )";
-        mysqli_query($koneksi, $insert_ck);
+        mysqli_query($koneksi,$insert_ck);
         return mysqli_affected_rows($koneksi);
     } else {
         return false;
@@ -277,6 +280,8 @@ function order_dc($order_dc)
     $tgl_keluar_dc = htmlspecialchars($order_dc['tgl_keluar_dc']);
     $ket_dc = htmlspecialchars($order_dc['keterangan_dc']);
 
+    $id_pelanggan = isset($order_dc['id_pelanggan']) ? $order_dc['id_pelanggan'] : NULL;
+
     $pkt_dc = mysqli_query($koneksi, "SELECT * FROM tb_dry_clean WHERE nama_paket_dc = '$jns_pkt_dc'");
     if (mysqli_num_rows($pkt_dc) === 1) {
         $result_dc = mysqli_fetch_assoc($pkt_dc);
@@ -288,12 +293,13 @@ function order_dc($order_dc)
         $limitNum = substr($str, 0, 7);
         $orderNum = 'DC-' . strtoupper($limitNum);
 
-        $insert_dc = "INSERT INTO tb_order_dc (or_dc_number, nama_pel_dc, no_telp_dc, alamat_dc, jenis_paket_dc, wkt_krj_dc, berat_qty_dc, harga_perkilo, tgl_masuk_dc, tgl_keluar_dc, tot_bayar, keterangan_dc) VALUES( 
+        $insert_dc = "INSERT INTO tb_order_dc (id_pelanggan, or_dc_number, nama_pel_dc, no_telp_dc, alamat_dc, jenis_paket_dc, wkt_krj_dc, berat_qty_dc, harga_perkilo, tgl_masuk_dc, tgl_keluar_dc, tot_bayar, keterangan_dc) VALUES( 
+            " . ($id_pelanggan ? "'$id_pelanggan'" : "NULL") . ",
             '$orderNum','$nama_pel_dc','$no_telp_dc','$alamat_dc',
             '$jns_pkt_dc','$wkt_krj_dc','$berat_qty_dc','$tarif_perkilo_dc',
             '$tgl_masuk_dc','$tgl_keluar_dc','$total_bayar_dc',
             '$ket_dc' )";
-        mysqli_query($koneksi, $insert_dc);
+        mysqli_query($koneksi,$insert_dc);
         return mysqli_affected_rows($koneksi);
     } else {
         return false;
@@ -320,6 +326,8 @@ function order_cs($order_cs)
     $tgl_kel_cs = htmlspecialchars($order_cs['tgl_keluar_cs']);
     $ket_cs = htmlspecialchars($order_cs['keterangan_cs']);
 
+    $id_pelanggan = isset($order_cs['id_pelanggan']) ? $order_cs['id_pelanggan'] : NULL;
+
     $pkt_cs = mysqli_query($koneksi, "SELECT * FROM tb_cuci_satuan WHERE nama_cs = '$jenis_pkt_cs'");
     if (mysqli_num_rows($pkt_cs) === 1) {
         $result_cs = mysqli_fetch_assoc($pkt_cs);
@@ -331,7 +339,7 @@ function order_cs($order_cs)
         $limitNo_cs = substr($noCs, 0, 7);
         $orderNum_cs = 'CS-' . strtoupper($limitNo_cs);
 
-        $query_cs = "INSERT INTO tb_order_cs (or_cs_number, nama_pel_cs, no_telp_cs, alamat_cs, jenis_paket_cs, wkt_krj_cs, jml_pcs, harga_perpcs, tgl_masuk_cs, tgl_keluar_cs, tot_bayar, keterangan_cs) VALUES (
+        $query_cs = "INSERT INTO tb_order_cs (id_pelanggan, or_cs_number, nama_pel_cs, no_telp_cs, alamat_cs, jenis_paket_cs, wkt_krj_cs, jml_pcs, harga_perpcs, tgl_masuk_cs, tgl_keluar_cs, tot_bayar, keterangan_cs) VALUES (" . ($id_pelanggan ? "'$id_pelanggan'" : "NULL") . ",
             '$orderNum_cs','$nama_pel_cs','$no_telp_cs','$alamat_cs','$jenis_pkt_cs',
             '$wkt_krj_cs','$jml_pcs','$trf_cs','$tgl_msk_cs','$tgl_kel_cs','$totBayar_cs','$ket_cs'
         )";
@@ -419,6 +427,14 @@ function transaksi_ck($trans_ck)
     $keterangan = htmlspecialchars($trans_ck['keterangan']);
     $nominal_bayar = htmlspecialchars($trans_ck['nominal']);
 
+    // Ambil id_pelanggan dari tb_order_ck
+    $order_query = mysqli_query($koneksi, "SELECT id_pelanggan FROM tb_order_ck WHERE or_ck_number = '$or_number'");
+    $id_pelanggan = NULL;
+    if ($order_query && mysqli_num_rows($order_query) > 0) {
+        $order_data = mysqli_fetch_assoc($order_query);
+        $id_pelanggan = $order_data['id_pelanggan'];
+    }
+
     if ($nominal_bayar < $total) {
         echo "<script>alert('Nominal tidak mencukupi');</script>";
         return false;
@@ -432,18 +448,26 @@ function transaksi_ck($trans_ck)
         $status = "Sukses";
     }
 
-    $query_insert_ck = "INSERT INTO tb_riwayat_ck (or_number, pelanggan, no_telp, alamat, j_paket, wkt_kerja, berat, h_perkilo, tgl_msk, tgl_klr, total, nominal_byr, kembalian, status, keterangan) VALUES(
+    // Insert ke riwayat
+    $query_insert_ck = "INSERT INTO tb_riwayat_ck (id_pelanggan, or_number, pelanggan, no_telp, alamat, j_paket, wkt_kerja, berat, h_perkilo, tgl_msk, tgl_klr, total, nominal_byr, kembalian, status, keterangan) VALUES(
+        " . ($id_pelanggan ? "'$id_pelanggan'" : "NULL") . ",
         '$or_number','$pelanggan','$no_telp','$alamat',
         '$j_paket','$wkt_kerja','$berat','$h_perkilo',
         '$tgl_msk','$tgl_klr','$total','$nominal_bayar','$kembalian','$status','$keterangan'
     )";
 
     mysqli_query($koneksi, $query_insert_ck);
-    return mysqli_affected_rows($koneksi);
+    $insert_result = mysqli_affected_rows($koneksi);
+    
+    // PENTING: HAPUS ORDER DARI tb_order_ck SETELAH DIBAYAR
+    if ($insert_result > 0) {
+        mysqli_query($koneksi, "DELETE FROM tb_order_ck WHERE or_ck_number = '$or_number'");
+    }
+    
+    return $insert_result;
 }
 
-function transaksi_cs($trans_cs)
-{
+function transaksi_cs($trans_cs){
     global $koneksi;
 
     $or_number = htmlspecialchars($trans_cs['or_number']);
@@ -460,6 +484,14 @@ function transaksi_cs($trans_cs)
     $keterangan = htmlspecialchars($trans_cs['keterangan']);
     $nominal_bayar = htmlspecialchars($trans_cs['nominal']);
 
+    // Ambil id_pelanggan
+    $order_query = mysqli_query($koneksi, "SELECT id_pelanggan FROM tb_order_cs WHERE or_cs_number = '$or_number'");
+    $id_pelanggan = NULL;
+    if ($order_query && mysqli_num_rows($order_query) > 0) {
+        $order_data = mysqli_fetch_assoc($order_query);
+        $id_pelanggan = $order_data['id_pelanggan'];
+    }
+
     if ($nominal_bayar < $total) {
         echo "<script>alert('Nominal tidak mencukupi');</script>";
         return false;
@@ -468,23 +500,31 @@ function transaksi_cs($trans_cs)
     if ($nominal_bayar > $total) {
         $kembalian = $nominal_bayar - $total;
         $status = "Sukses";
-    } else if ($nominal_bayar == $total) {
-        $kembalian = 0;
+    }else if ($nominal_bayar == $total) {
+        $kembalian  = 0;
         $status = "Sukses";
     }
 
-    $query_insert_cs = "INSERT INTO tb_riwayat_cs (or_number, pelanggan, no_telp, alamat, j_paket, wkt_kerja, jml_pcs, h_perpcs, tgl_msk, tgl_klr, total, nominal_byr, kembalian, status, keterangan) VALUES(
+    // Insert ke riwayat
+    $query_insert_cs = "INSERT INTO tb_riwayat_cs (id_pelanggan, or_number, pelanggan, no_telp, alamat, j_paket, wkt_kerja, jml_pcs, h_perpcs, tgl_msk, tgl_klr, total, nominal_byr, kembalian, status, keterangan) VALUES(
+        " . ($id_pelanggan ? "'$id_pelanggan'" : "NULL") . ",
         '$or_number','$pelanggan','$no_telp','$alamat',
         '$jns_paket','$wkt_kerja','$jml_pcs','$h_perpcs',
         '$tgl_msk','$tgl_klr','$total','$nominal_bayar','$kembalian','$status','$keterangan'
     )";
 
     mysqli_query($koneksi, $query_insert_cs);
-    return mysqli_affected_rows($koneksi);
+    $insert_result = mysqli_affected_rows($koneksi);
+    
+    // HAPUS ORDER SETELAH DIBAYAR
+    if ($insert_result > 0) {
+        mysqli_query($koneksi, "DELETE FROM tb_order_cs WHERE or_cs_number = '$or_number'");
+    }
+    
+    return $insert_result;
 }
 
-function transaksi_dc($trans_dc)
-{
+function transaksi_dc($trans_dc){
     global $koneksi;
 
     $or_number = htmlspecialchars($trans_dc['or_number']);
@@ -501,6 +541,14 @@ function transaksi_dc($trans_dc)
     $keterangan = htmlspecialchars($trans_dc['keterangan']);
     $nominal_bayar = htmlspecialchars($trans_dc['nominal']);
 
+    // Ambil id_pelanggan
+    $order_query = mysqli_query($koneksi, "SELECT id_pelanggan FROM tb_order_dc WHERE or_dc_number = '$or_number'");
+    $id_pelanggan = NULL;
+    if ($order_query && mysqli_num_rows($order_query) > 0) {
+        $order_data = mysqli_fetch_assoc($order_query);
+        $id_pelanggan = $order_data['id_pelanggan'];
+    }
+
     if ($nominal_bayar < $total) {
         echo "<script>alert('Nominal tidak mencukupi');</script>";
         return false;
@@ -509,19 +557,28 @@ function transaksi_dc($trans_dc)
     if ($nominal_bayar > $total) {
         $kembalian = $nominal_bayar - $total;
         $status = "Sukses";
-    } else if ($nominal_bayar == $total) {
+    }else if ($nominal_bayar == $total) {
         $kembalian  = 0;
         $status = "Sukses";
     }
 
-    $query_insert_dc = "INSERT INTO tb_riwayat_dc (or_number, pelanggan, no_telp, alamat, j_paket, wkt_kerja, berat, h_perkilo, tgl_msk, tgl_klr, total, nominal_byr, kembalian, status, keterangan) VALUES(
+    // Insert ke riwayat
+    $query_insert_dc = "INSERT INTO tb_riwayat_dc (id_pelanggan, or_number, pelanggan, no_telp, alamat, j_paket, wkt_kerja, berat, h_perkilo, tgl_msk, tgl_klr, total, nominal_byr, kembalian, status, keterangan) VALUES(
+        " . ($id_pelanggan ? "'$id_pelanggan'" : "NULL") . ",
         '$or_number','$pelanggan','$no_telp','$alamat',
         '$jns_paket','$wkt_kerja','$berat','$h_perkilo',
         '$tgl_msk','$tgl_klr','$total','$nominal_bayar','$kembalian','$status','$keterangan'
     )";
 
     mysqli_query($koneksi, $query_insert_dc);
-    return mysqli_affected_rows($koneksi);
+    $insert_result = mysqli_affected_rows($koneksi);
+    
+    // HAPUS ORDER SETELAH DIBAYAR
+    if ($insert_result > 0) {
+        mysqli_query($koneksi, "DELETE FROM tb_order_dc WHERE or_dc_number = '$or_number'");
+    }
+    
+    return $insert_result;
 }
 
 function del_riwayat_ck($id_ck)
@@ -546,4 +603,125 @@ function del_riwayat_cs($id_cs)
     $query = "DELETE FROM tb_riwayat_cs WHERE id_cs = '$id_cs'";
     mysqli_query($koneksi, $query);
     return mysqli_affected_rows($koneksi);
+}
+
+// ==========================================
+// FUNGSI AUTHENTICATION & AUTHORIZATION
+// ==========================================
+
+// Login untuk Admin & Karyawan
+function loginStaff($username, $password) {
+    global $koneksi;
+    
+    $username = mysqli_real_escape_string($koneksi, $username);
+    
+    $query = "SELECT * FROM master WHERE username = '$username'";
+    $result = mysqli_query($koneksi, $query);
+    
+    if (mysqli_num_rows($result) === 1) {
+        $user = mysqli_fetch_assoc($result);
+        
+        if (password_verify($password, $user['password'])) {
+            // Set session
+            $_SESSION['user_id'] = $user['id_user'];
+            $_SESSION['user_nama'] = $user['nama'];
+            $_SESSION['user_username'] = $user['username'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['level'];
+            $_SESSION['login_time'] = time();
+            
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// Login untuk Pelanggan
+function loginPelanggan($username, $password) {
+    global $koneksi;
+    
+    $username = mysqli_real_escape_string($koneksi, $username);
+    
+    $query = "SELECT * FROM tb_pelanggan WHERE username = '$username' AND status = 'active'";
+    $result = mysqli_query($koneksi, $query);
+    
+    if (mysqli_num_rows($result) === 1) {
+        $user = mysqli_fetch_assoc($result);
+        
+        if (password_verify($password, $user['password'])) {
+            // Set session
+            $_SESSION['user_id'] = $user['id_pelanggan'];
+            $_SESSION['user_nama'] = $user['nama_lengkap'];
+            $_SESSION['user_username'] = $user['username'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = 'Pelanggan';
+            $_SESSION['login_time'] = time();
+            
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// Register Pelanggan Baru
+function registerPelanggan($data) {
+    global $koneksi;
+    
+    $nama = htmlspecialchars($data['nama_lengkap']);
+    $email = htmlspecialchars($data['email']);
+    $no_telp = htmlspecialchars($data['no_telp']);
+    $alamat = htmlspecialchars($data['alamat']);
+    $username = htmlspecialchars($data['username']);
+    $password = $data['password'];
+    $confirm_password = $data['confirm_password'];
+    
+    // Validasi
+    if ($password !== $confirm_password) {
+        return ['success' => false, 'message' => 'Password tidak cocok!'];
+    }
+    
+    if (strlen($password) < 6) {
+        return ['success' => false, 'message' => 'Password minimal 6 karakter!'];
+    }
+    
+    // Cek username sudah ada
+    $check_username = mysqli_query($koneksi, "SELECT * FROM tb_pelanggan WHERE username = '$username'");
+    if (mysqli_num_rows($check_username) > 0) {
+        return ['success' => false, 'message' => 'Username sudah digunakan!'];
+    }
+    
+    // Cek email sudah ada
+    $check_email = mysqli_query($koneksi, "SELECT * FROM tb_pelanggan WHERE email = '$email'");
+    if (mysqli_num_rows($check_email) > 0) {
+        return ['success' => false, 'message' => 'Email sudah terdaftar!'];
+    }
+    
+    // Hash password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
+    // Insert ke database
+    $query = "INSERT INTO tb_pelanggan (nama_lengkap, email, no_telp, alamat, username, password, status) 
+              VALUES ('$nama', '$email', '$no_telp', '$alamat', '$username', '$hashed_password', 'active')";
+    
+    if (mysqli_query($koneksi, $query)) {
+        return ['success' => true, 'message' => 'Registrasi berhasil! Silakan login.'];
+    }
+    
+    return ['success' => false, 'message' => 'Gagal mendaftar. Coba lagi.'];
+}
+
+// Get Pelanggan by ID
+function getPelangganById($id) {
+    global $koneksi;
+    $id = mysqli_real_escape_string($koneksi, $id);
+    $query = "SELECT * FROM tb_pelanggan WHERE id_pelanggan = '$id'";
+    $result = mysqli_query($koneksi, $query);
+    
+    if ($result && mysqli_num_rows($result) > 0) {
+        return mysqli_fetch_assoc($result);
+    }
+    
+    return null;
 }

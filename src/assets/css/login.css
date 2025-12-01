@@ -145,7 +145,7 @@ html {
     position: relative;
     border-radius: var(--radius);
     min-height: 600px;
-    max-height: 600px;
+    max-height: 700px;
     background: var(--bg-primary);
     box-shadow: var(--shadow-xl);
     border: 1px solid var(--border);
@@ -166,7 +166,7 @@ html {
 }
 
 .logo img {
-    width: 100%;
+    width: 120%;
     animation-name: toLeft;
     animation-duration: 1.2s;
     animation-timing-function: ease;
@@ -346,14 +346,14 @@ html {
 
 
 .box__right-content {
-    height: 600px;
+    min-height: 600px;
     position: relative;
 }
 
 .text__right {
     position: absolute;
     top: 200px;
-    left: 170px;
+    left: 220px;
     z-index: 99;
 }
 
@@ -372,8 +372,8 @@ html {
     z-index: 98;
     z-index: 100;
     width: 280px;
-    top: 10px;
-    left: -100px;
+    top: 70px;
+    left: -90px;
     animation: munculDariBawah 2s ease-out forwards;
     animation-delay: 0.2s;
 }
