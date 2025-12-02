@@ -126,14 +126,26 @@ usort($semua_order, function ($a, $b) {
                                                 <td align="center">
                                                     <?php
                                                     // Tentukan URL detail
-                                                    if ($order['tipe'] == 'CK') {
-                                                        $detail_url = url('detail_order/detail_ck/detail_order_ck.php?or_ck_number=' . $order['no_order']);
-                                                    } elseif ($order['tipe'] == 'DC') {
-                                                        $detail_url = url('detail_order/detail_dc/detail_order_dc.php?or_dc_number=' . $order['no_order']);
-                                                    } else {
-                                                        $detail_url = url('detail_order/detail_cs/detail_order_cs.php?or_cs_number=' . $order['no_order']);
-                                                    }
-                                                    ?>
+                                                    if ($order['status'] === 'Menunggu Pembayaran') {
+    // Jika belum bayar → Akses halaman pelanggan
+    if ($order['tipe'] == 'CK') {
+        $detail_url = url('pelanggan/detail_order/detail_ck.php?or_ck_number=' . $order['no_order']);
+    } elseif ($order['tipe'] == 'DC') {
+        $detail_url = url('pelanggan/detail_order/detail_dc.php?or_dc_number=' . $order['no_order']);
+    } else {
+        $detail_url = url('pelanggan/detail_order/detail_cs.php?or_cs_number=' . $order['no_order']);
+    }
+} else {
+    // Jika sudah bayar (Sukses/Lunas) → Akses riwayat pelanggan
+    if ($order['tipe'] == 'CK') {
+        $detail_url = url('pelanggan/riwayat_order/detail_riwayat_ck.php?or_number=' . $order['no_order']);
+    } elseif ($order['tipe'] == 'DC') {
+        $detail_url = url('pelanggan/riwayat_order/detail_riwayat_dc.php?or_number=' . $order['no_order']);
+    } else {
+        $detail_url = url('pelanggan/riwayat_order/detail_riwayat_cs.php?or_number=' . $order['no_order']);
+    }
+}
+?>
 
                                                     <a href="<?= $detail_url ?>" class="btn btn-detail">Detail</a>
 

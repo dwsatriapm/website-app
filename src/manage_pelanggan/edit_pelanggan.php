@@ -147,8 +147,5 @@ if (isset($_POST['reset_password'])) {
     </div>
 </div>
 
-<footer>
-    <p>&copy; 2025 Laundry Kami. All rights reserved.</p>
-</footer>
 </body>
 </html>

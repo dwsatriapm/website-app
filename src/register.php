@@ -33,6 +33,7 @@ if (isset($_POST['register'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laundry Kami | Daftar Akun</title>
     <link rel="stylesheet" href="assets/css/login.css">
+ <!-- TAMBAH INI -->
     <link rel="shortcut icon" href="<?= url('assets/img/logo/logo.png') ?>" type="image/x-icon">
     
     <!-- CSS Khusus untuk halaman register -->
@@ -79,29 +80,108 @@ if (isset($_POST['register'])) {
         .register-page .form-col .box__left-form-group:last-child {
             margin-bottom: 0;
         }
+
+        .alert {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 70px;
+    transition: var(--transition);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.box1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 400px;
+    min-height: 100px;
+    position: relative;
+    padding: 30px 25px;
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-xl);
+    border: 2px solid var(--border);
+    animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.box1 p {
+    color: var(--text-primary);
+    font-size: 15px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.btn-alert {
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 32px;
+    cursor: pointer;
+    outline: none;
+    border-radius: var(--radius-xs);
+    text-transform: uppercase;
+    transition: var(--transition);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-md);
+}
     </style>
 </head>
 <body class="register-page"> <!-- Tambahkan class untuk scope CSS -->
 
     <?php if ($success) : ?>
-    <div class="overlay">
-        <div class="boxSalah" style="background: #10b981;">
-            <p style="color: white;"><?= $success ?></p>
-            <a href="<?= url('login.php'); ?>" style="background: white; color: #10b981; padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 15px; display: inline-block;">
-                Login Sekarang
-            </a>
-        </div>
+<div class="alert">
+    <div class="box1">
+        <img src="<?= url('assets/img/berhasil.png') ?>" height="68" alt="alert sukses">
+        <p><?= $success ?></p>
+        <button onclick="window.location='<?= url('login.php') ?>'" class="btn-alert btn-success">Login Sekarang</button>
     </div>
-    <?php endif ?>
+</div>
+<?php endif ?>
 
-    <?php if ($error) : ?>
-    <div class="overlay">
-        <div class="boxSalah">
-            <a href="<?= url('register.php'); ?>" class="close">&times;</a>
-            <p><?= $error ?></p>
-        </div>
+<?php if ($error) : ?>
+<div class="alert">
+    <div class="box1">
+        <img src="<?= url('assets/img/gagal.png') ?>" height="68" alt="alert gagal">
+        <p><?= $error ?></p>
+        <button onclick="window.location='<?= url('register.php') ?>'" class="btn-alert btn-fail">Coba Lagi</button>
     </div>
-    <?php endif ?>
+</div>
+<?php endif ?>
 
     <div class="box">
         <div class="box-content">
