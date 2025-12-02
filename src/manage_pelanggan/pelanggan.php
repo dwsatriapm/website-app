@@ -2,7 +2,6 @@
 $page_title = "Manage Pelanggan";
 require_once('../_header.php');
 
-// Proteksi: Hanya Admin
 requireRole('Admin');
 
 $pelanggan_list = query("SELECT * FROM tb_pelanggan ORDER BY created_at DESC");

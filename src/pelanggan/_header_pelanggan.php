@@ -1,9 +1,7 @@
 <?php
-// Path relatif dari folder pelanggan ke root
 require_once(__DIR__ . '/../_functions.php');
 require_once(__DIR__ . '/../_auth.php');
 
-// Proteksi: Hanya pelanggan yang bisa akses
 requireRole('Pelanggan');
 
  $user = getCurrentUser();
@@ -27,8 +25,7 @@ requireRole('Pelanggan');
             </div>
             <ul class="nav-menu">
                 <li>
-                    <!-- Tampilkan nama dan role pelanggan -->
-                    <span id="judul-sm">Halo! <?= $user['nama'] ?> (Pelanggan)</span>
+                    <span id="judul-sm">Halo <?= $user['nama'] ?> (Pelanggan)</span>
                     <ul class="dropdown-menu">
                         <li><a href="<?= url('pelanggan/profil.php') ?>">Profil Saya</a></li>
                         <li><a href="<?= url('logout.php') ?>">Logout</a></li>
@@ -36,7 +33,6 @@ requireRole('Pelanggan');
                 </li>
             </ul>
         </nav>
-        <!-- Navigasi Khusus Pelanggan -->
         <div id="nav-mini">
             <a href="<?= url('pelanggan/dashboard.php') ?>" class="link-nav">Dashboard</a>
             <a href="<?= url('pelanggan/buat_order.php') ?>" class="link-nav">Buat Order Baru</a>

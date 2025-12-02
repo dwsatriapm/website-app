@@ -3,7 +3,6 @@ session_start();
 require_once __DIR__ . '/_functions.php';
 require_once __DIR__ . '/_auth.php';
 
-// Redirect jika sudah login
 if (isLoggedIn()) {
     if (hasRole('Pelanggan')) {
         header('Location: ' . url('pelanggan/dashboard.php'));
@@ -16,14 +15,12 @@ if (isLoggedIn()) {
 $error = '';
 $login_type = isset($_POST['login_type']) ? $_POST['login_type'] : 'staff';
 
-// Proses Login
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $login_type = $_POST['login_type'];
 
     if ($login_type === 'staff') {
-        // Login Admin/Karyawan (KODE LAMA DIGANTI)
         if (loginStaff($username, $password)) {
             header('Location: ' . url('dashboard.php'));
             exit;
@@ -31,7 +28,6 @@ if (isset($_POST['login'])) {
             $error = 'Username atau password salah!';
         }
     } else {
-        // Login Pelanggan (FITUR BARU)
         if (loginPelanggan($username, $password)) {
             header('Location: ' . url('pelanggan/dashboard.php'));
             exit;
@@ -51,7 +47,6 @@ if (isset($_POST['login'])) {
     <link rel="stylesheet" href="assets/css/login.css">
     <link rel="shortcut icon" href="<?= url('assets/img/logo/logo.png') ?>" type="image/x-icon">
     <style>
-        /* Tab Switcher Style */
         .login-tabs {
             display: flex;
             margin-bottom: 25px;
@@ -137,18 +132,16 @@ if (isset($_POST['login'])) {
                 </div>
 
                 <div class="box__left-form">
-                    <!-- TAB SWITCHER - FITUR BARU -->
                     <div class="login-tabs">
                         <button type="button" class="tab-btn active" onclick="switchTab('staff', this)">
-                            🔑 Staff/Admin
+                            Staff/Admin
                         </button>
                         <button type="button" class="tab-btn" onclick="switchTab('customer', this)">
-                            👤 Pelanggan
+                            Pelanggan
                         </button>
                     </div>
 
                     <form action="" method="post">
-                        <!-- HIDDEN INPUT UNTUK LOGIN TYPE -->
                         <input type="hidden" name="login_type" id="login_type" value="staff">
 
                         <div class="box__left-form-group">
@@ -167,7 +160,6 @@ if (isset($_POST['login'])) {
                             <button type="submit" name="login" class="btn-login mt-1">Login</button>
                         </div>
 
-                        <!-- LINK REGISTER - TAMPIL HANYA UNTUK PELANGGAN -->
                         <div class="register-link" id="register-link" style="display: none;">
                             Belum punya akun? <a href="<?= url('register.php') ?>">Daftar di sini</a>
                         </div>
@@ -182,7 +174,7 @@ if (isset($_POST['login'])) {
             <div class="col box__right">
                 <div class="box__right-content">
                     <div class="text__right">
-                        <h1 id="title-right">Admin Laundry</h1>
+                        <h1 id="title-right">Staff/Admin Laundry</h1>
                     </div>
                     <img src="<?= url('assets/img/orang.png') ?>" alt="" class="box-img-orang">
                     <div class="bubble-1"></div>
@@ -215,14 +207,11 @@ if (isset($_POST['login'])) {
             const registerLink = document.getElementById('register-link');
             const titleRight = document.getElementById('title-right');
 
-            // Update active tab
             tabs.forEach(tab => tab.classList.remove('active'));
             element.classList.add('active');
 
-            // Update hidden input
             loginType.value = type;
 
-            // Show/hide register link & change title
             if (type === 'customer') {
                 registerLink.style.display = 'block';
                 titleRight.textContent = 'Portal Pelanggan';

@@ -5,7 +5,6 @@ require_once('_header_pelanggan.php');
 $id_pelanggan = $user['id'];
 $data_pelanggan = getPelangganById($id_pelanggan);
 
-// Ambil daftar paket
 $paket_ck = query("SELECT * FROM tb_cuci_komplit");
 $paket_dc = query("SELECT * FROM tb_dry_clean");
 $paket_cs = query("SELECT * FROM tb_cuci_satuan");
@@ -13,11 +12,9 @@ $paket_cs = query("SELECT * FROM tb_cuci_satuan");
 $success = '';
 $error = '';
 
-// Proses order
 if (isset($_POST['order'])) {
     $jenis_layanan = $_POST['jenis_layanan'];
     
-    // Data yang akan dikirim ke fungsi order
     $data_order = [
         'id_pelanggan' => $id_pelanggan,
         'nama_pel_' . $jenis_layanan => $data_pelanggan['nama_lengkap'],
@@ -35,7 +32,6 @@ if (isset($_POST['order'])) {
         $data_order['jml_pcs'] = $_POST['jumlah'];
     }
     
-    // Panggil fungsi order sesuai jenis layanan
     $result = 0;
     if ($jenis_layanan === 'ck') {
         $result = order_ck($data_order);
@@ -166,7 +162,6 @@ if (isset($_POST['order'])) {
 </div>
 
 <script>
-    // Data paket dari PHP
     const paketData = {
         ck: <?= json_encode($paket_ck) ?>,
         dc: <?= json_encode($paket_dc) ?>,
@@ -178,7 +173,6 @@ if (isset($_POST['order'])) {
         const paketSelect = document.getElementById('jenis_paket');
         const satuanLabel = document.getElementById('satuan_label');
         
-        // Reset options
         paketSelect.innerHTML = '<option value="">-- Pilih Paket --</option>';
         
         if (jenisLayanan) {
@@ -203,12 +197,10 @@ if (isset($_POST['order'])) {
         }
     }
     
-    // Set tanggal hari ini sebagai default
     document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('tgl_masuk').value = today;
         
-        // Set tanggal keluar 2 hari dari sekarang sebagai default
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 2);
         document.getElementById('tgl_keluar').value = tomorrow.toISOString().split('T')[0];

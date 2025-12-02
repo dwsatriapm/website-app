@@ -1,8 +1,7 @@
-<?php 
+<?php
 $page_title = "Edit Pelanggan";
 require_once('../_header.php');
 
-// Proteksi: Hanya Admin
 requireRole('Admin');
 
 $id = $_GET['id'];
@@ -22,8 +21,7 @@ if (isset($_POST['update'])) {
     $no_telp = htmlspecialchars($_POST['no_telp']);
     $alamat = htmlspecialchars($_POST['alamat']);
     $status = $_POST['status'];
-    
-    // Cek email duplikat
+
     $check = query("SELECT * FROM tb_pelanggan WHERE email = '$email' AND id_pelanggan != '$id'");
     if (count($check) > 0) {
         $error = 'Email sudah digunakan pelanggan lain!';
@@ -35,23 +33,22 @@ if (isset($_POST['update'])) {
                     alamat = '$alamat',
                     status = '$status'
                   WHERE id_pelanggan = '$id'";
-        
+
         if (mysqli_query($koneksi, $query)) {
             $success = 'Data pelanggan berhasil diperbarui!';
-            $pelanggan = getPelangganById($id); // Refresh
+            $pelanggan = getPelangganById($id); 
         } else {
             $error = 'Gagal memperbarui data!';
         }
     }
 }
 
-// Reset password
 if (isset($_POST['reset_password'])) {
-    $new_password = 'password123'; // Default password
+    $new_password = 'password123'; 
     $hashed = password_hash($new_password, PASSWORD_DEFAULT);
-    
+
     $query = "UPDATE tb_pelanggan SET password = '$hashed' WHERE id_pelanggan = '$id'";
-    
+
     if (mysqli_query($koneksi, $query)) {
         $success = "Password berhasil direset menjadi: <strong>$new_password</strong>";
     } else {
@@ -61,23 +58,23 @@ if (isset($_POST['reset_password'])) {
 ?>
 
 <?php if ($success) : ?>
-<div class="alert">
-    <div class="box">
-        <img src="<?= url('assets/img/berhasil.png') ?>" height="68" alt="alert sukses">
-        <p><?= $success ?></p>
-        <a href="<?= url('manage_pelanggan/edit_pelanggan.php?id=' . $id) ?>" class="btn-alert btn-success">OK</a>
+    <div class="alert">
+        <div class="box">
+            <img src="<?= url('assets/img/berhasil.png') ?>" height="68" alt="alert sukses">
+            <p><?= $success ?></p>
+            <a href="<?= url('manage_pelanggan/edit_pelanggan.php?id=' . $id) ?>" class="btn-alert btn-success">OK</a>
+        </div>
     </div>
-</div>
 <?php endif ?>
 
 <?php if ($error) : ?>
-<div class="alert">
-    <div class="box">
-        <img src="<?= url('assets/img/gagal.png') ?>" height="68" alt="alert gagal">
-        <p><?= $error ?></p>
-        <a href="<?= url('manage_pelanggan/edit_pelanggan.php?id=' . $id) ?>" class="btn-alert btn-fail">OK</a>
+    <div class="alert">
+        <div class="box">
+            <img src="<?= url('assets/img/gagal.png') ?>" height="68" alt="alert gagal">
+            <p><?= $error ?></p>
+            <a href="<?= url('manage_pelanggan/edit_pelanggan.php?id=' . $id) ?>" class="btn-alert btn-fail">OK</a>
+        </div>
     </div>
-</div>
 <?php endif ?>
 
 <div class="main-content">
@@ -88,9 +85,7 @@ if (isset($_POST['reset_password'])) {
                     <h2 class="judul-md">Edit Pelanggan</h2>
                     <p class="judul-sm">Username: <?= $pelanggan['username'] ?></p>
                 </div>
-                <div class="col-header txt-right">
-                    <a href="<?= url('manage_pelanggan/pelanggan.php') ?>" class="btn-xs bg-transparent">← Kembali</a>
-                </div>
+
             </div>
         </div>
 
@@ -106,22 +101,22 @@ if (isset($_POST['reset_password'])) {
                                 <label>Nama Lengkap</label>
                                 <input type="text" name="nama_lengkap" value="<?= $pelanggan['nama_lengkap'] ?>" required>
                             </div>
-                            
+
                             <div class="form-grup">
                                 <label>Email</label>
                                 <input type="email" name="email" value="<?= $pelanggan['email'] ?>" required>
                             </div>
-                            
+
                             <div class="form-grup">
                                 <label>Nomor Telepon</label>
                                 <input type="text" name="no_telp" value="<?= $pelanggan['no_telp'] ?>" required>
                             </div>
-                            
+
                             <div class="form-grup">
                                 <label>Alamat</label>
                                 <textarea name="alamat" rows="3" required><?= $pelanggan['alamat'] ?></textarea>
                             </div>
-                            
+
                             <div class="form-grup">
                                 <label>Status Akun</label>
                                 <select name="status" required>
@@ -129,12 +124,13 @@ if (isset($_POST['reset_password'])) {
                                     <option value="inactive" <?= $pelanggan['status'] == 'inactive' ? 'selected' : '' ?>>Nonaktif</option>
                                 </select>
                             </div>
-                            
+
                             <div class="form-footer">
+                                <a class="btn-sm bg-transparent" href="<?= url('manage_pelanggan/pelanggan.php') ?>">Kembali</a>
                                 <div class="buttons">
                                     <button type="submit" name="update" class="btn-sm bg-primary" style="color: whitesmoke;">Simpan Perubahan</button>
-                                    <button type="submit" name="reset_password" class="btn-sm" style="background: var(--warning); color: white;" 
-                                            onclick="return confirm('Reset password ke default: password123?')">
+                                    <button type="submit" name="reset_password" class="btn-sm" style="background: var(--warning); color: white;"
+                                        onclick="return confirm('Reset password ke default: password123?')">
                                         Reset Password
                                     </button>
                                 </div>
@@ -148,4 +144,5 @@ if (isset($_POST['reset_password'])) {
 </div>
 
 </body>
+
 </html>

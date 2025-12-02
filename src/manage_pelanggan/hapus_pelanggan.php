@@ -2,12 +2,10 @@
 require_once('../_functions.php');
 require_once('../_auth.php');
 
-// Proteksi: Hanya Admin
 requireRole('Admin');
 
 $id = $_GET['id'];
 
-// Hapus semua data terkait pelanggan
 $pelanggan = getPelangganById($id);
 
 if (!$pelanggan) {
@@ -15,17 +13,14 @@ if (!$pelanggan) {
     exit;
 }
 
-// Hapus order pelanggan
 mysqli_query($koneksi, "DELETE FROM tb_order_ck WHERE id_pelanggan = '$id'");
 mysqli_query($koneksi, "DELETE FROM tb_order_dc WHERE id_pelanggan = '$id'");
 mysqli_query($koneksi, "DELETE FROM tb_order_cs WHERE id_pelanggan = '$id'");
 
-// Hapus riwayat pelanggan
 mysqli_query($koneksi, "DELETE FROM tb_riwayat_ck WHERE id_pelanggan = '$id'");
 mysqli_query($koneksi, "DELETE FROM tb_riwayat_dc WHERE id_pelanggan = '$id'");
 mysqli_query($koneksi, "DELETE FROM tb_riwayat_cs WHERE id_pelanggan = '$id'");
 
-// Hapus akun pelanggan
 $result = mysqli_query($koneksi, "DELETE FROM tb_pelanggan WHERE id_pelanggan = '$id'");
 ?>
 

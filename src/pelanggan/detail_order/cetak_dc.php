@@ -7,7 +7,6 @@ requireRole('Pelanggan');
 $or_number = $_GET['or_dc_number'];
 $data = query("SELECT * FROM tb_order_dc WHERE or_dc_number = '$or_number'")[0];
 
-// VALIDASI: Pelanggan hanya bisa cetak order miliknya
 if ($data['id_pelanggan'] != $_SESSION['user_id']) {
     header('Location: ' . url('403.php'));
     exit;
@@ -16,6 +15,7 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,46 +27,55 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Courier New', monospace;
             padding: 20px;
             background: #f9fafb;
         }
+
         .nota {
             max-width: 400px;
             margin: 0 auto;
             background: white;
             padding: 30px;
             border: 2px solid #000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .header {
             text-align: center;
             border-bottom: 2px dashed #000;
             padding-bottom: 15px;
             margin-bottom: 20px;
         }
+
         .header h1 {
             font-size: 24px;
             margin-bottom: 5px;
         }
+
         .header p {
             font-size: 12px;
             color: #666;
         }
+
         .row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
             font-size: 14px;
         }
+
         .row.bold {
             font-weight: bold;
         }
+
         .divider {
             border-top: 1px dashed #000;
             margin: 15px 0;
         }
+
         .total {
             background: #000;
             color: white;
@@ -74,9 +83,11 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             margin-top: 20px;
             text-align: center;
         }
+
         .total h2 {
             font-size: 24px;
         }
+
         .footer {
             text-align: center;
             margin-top: 20px;
@@ -84,6 +95,7 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             border-top: 2px dashed #000;
             font-size: 12px;
         }
+
         .status-badge {
             display: inline-block;
             background: #fbbf24;
@@ -93,26 +105,31 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             font-weight: bold;
             margin-top: 10px;
         }
+
         @media print {
             body {
                 background: white;
             }
+
             .nota {
                 box-shadow: none;
                 border: none;
             }
+
             .no-print {
                 display: none;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="nota">
         <div class="header">
-            <h1>🧺 LAUNDRY KAMI</h1>
-            <p>Jl. Contoh No. 123, Bandung</p>
-            <p>Telp: 0812-3456-7890</p>
+            <img src="/assets/img/logo/logo.png" alt="logo laundry kami" style="width: 100px;">
+            <h1>LAUNDRY KAMI </h1>
+            <p>Cirebon, Jawa Barat</p>
+            <p>Telp: 0123-456-789</p>
             <div class="status-badge">BELUM DIBAYAR</div>
         </div>
 
@@ -186,7 +203,7 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             font-size: 16px;
             cursor: pointer;
             font-weight: bold;
-        ">🖨️ Cetak Nota</button>
+        ">Cetak Nota</button>
         <button onclick="window.close()" style="
             background: #6b7280;
             color: white;
@@ -200,4 +217,5 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
         ">Tutup</button>
     </div>
 </body>
+
 </html>

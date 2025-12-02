@@ -2,7 +2,6 @@
 require_once __DIR__ . '/_functions.php';
 require_once __DIR__ . '/_auth.php';
 
-// Proteksi: Hanya Admin/Karyawan
 requireRole(['Admin', 'Karyawan']);
 
 $user = getCurrentUser();

@@ -4,32 +4,25 @@ require_once('_header_pelanggan.php');
 
  $id_pelanggan = $user['id'];
 
-// --- AMBIL SEMUA DATA (AKTIF + RIWAYAT) ---
 
-// 1. Ambil order aktif (belum dibayar)
  $order_ck = query("SELECT 'CK' as tipe, or_ck_number as no_order, jenis_paket_ck as paket, tot_bayar as total, tgl_masuk_ck as tgl_masuk, 'Menunggu Pembayaran' as status FROM tb_order_ck WHERE id_pelanggan = '$id_pelanggan'");
  $order_dc = query("SELECT 'DC' as tipe, or_dc_number as no_order, jenis_paket_dc as paket, tot_bayar as total, tgl_masuk_dc as tgl_masuk, 'Menunggu Pembayaran' as status FROM tb_order_dc WHERE id_pelanggan = '$id_pelanggan'");
  $order_cs = query("SELECT 'CS' as tipe, or_cs_number as no_order, jenis_paket_cs as paket, tot_bayar as total, tgl_masuk_cs as tgl_masuk, 'Menunggu Pembayaran' as status FROM tb_order_cs WHERE id_pelanggan = '$id_pelanggan'");
 
-// 2. Ambil riwayat (sudah dibayar/selesai)
  $riwayat_ck = query("SELECT 'CK' as tipe, or_number as no_order, j_paket as paket, total, tgl_msk as tgl_masuk, status FROM tb_riwayat_ck WHERE id_pelanggan = '$id_pelanggan'");
  $riwayat_dc = query("SELECT 'DC' as tipe, or_number as no_order, j_paket as paket, total, tgl_msk as tgl_masuk, status FROM tb_riwayat_dc WHERE id_pelanggan = '$id_pelanggan'");
  $riwayat_cs = query("SELECT 'CS' as tipe, or_number as no_order, j_paket as paket, total, tgl_msk as tgl_masuk, status FROM tb_riwayat_cs WHERE id_pelanggan = '$id_pelanggan'");
 
-// 3. Gabungkan semua data
  $semua_transaksi = array_merge($order_ck, $order_dc, $order_cs, $riwayat_ck, $riwayat_dc, $riwayat_cs);
 
-// 4. Urutkan berdasarkan tanggal
 usort($semua_transaksi, function($a, $b) {
     $dateA = $a['tgl_masuk'];
     $dateB = $b['tgl_masuk'];
     return strtotime($dateB) - strtotime($dateA);
 });
 
-// 5. Ambil 5 transaksi terbaru untuk ditampilkan
  $order_terbaru = array_slice($semua_transaksi, 0, 5);
 
-// Hitung ulang statistik
  $total_order = 0;
  $total_riwayat = 0;
 foreach ($semua_transaksi as $trans) {
@@ -43,7 +36,6 @@ foreach ($semua_transaksi as $trans) {
 
 <div class="main-content">
     <div class="container">
-        <!-- WELCOME SECTION -->
         <div class="baris">
             <div class="selamat-datang">
                 <div class="col-header">
@@ -56,7 +48,6 @@ foreach ($semua_transaksi as $trans) {
             </div>
         </div>
 
-        <!-- STATISTIK CARDS -->
         <div class="baris">
             <div class="col">
                 <div class="card">
@@ -107,7 +98,6 @@ foreach ($semua_transaksi as $trans) {
             </div>
         </div>
 
-        <!-- ORDER TERBARU -->
         <div class="baris">
             <div class="col mt-2">
                 <div class="card">
@@ -155,7 +145,6 @@ foreach ($semua_transaksi as $trans) {
                                         <td>Rp. <?= number_format($order['total'], 0, ',', '.') ?></td>
                                         <td>
                                             <?php
-                                            // Tampilkan status dengan class yang sesuai
                                             $status_class = 'status-pending';
                                             if ($order['status'] === 'Sukses' || $order['status'] === 'Lunas') {
                                                 $status_class = 'status-lunas';

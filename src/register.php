@@ -3,7 +3,6 @@ session_start();
 require_once __DIR__ . '/_functions.php';
 require_once __DIR__ . '/_auth.php';
 
-// Redirect jika sudah login
 if (isLoggedIn()) {
     if (hasRole('Pelanggan')) {
         header('Location: ' . url('pelanggan/dashboard.php'));
@@ -33,50 +32,39 @@ if (isset($_POST['register'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laundry Kami | Daftar Akun</title>
     <link rel="stylesheet" href="assets/css/login.css">
- <!-- TAMBAH INI -->
     <link rel="shortcut icon" href="<?= url('assets/img/logo/logo.png') ?>" type="image/x-icon">
     
-    <!-- CSS Khusus untuk halaman register -->
     <style>
-        /* Mengatur agar box registrasi memenuhi lebar dan lebih tinggi */
         .register-page .box-content {
             display: flex;
-            justify-content: center; /* Untuk memposisikan form di tengah */
+            justify-content: center; 
         }
 
-        /* Membuat kolom kiri (tempat form) mengambil seluruh lebar */
         .register-page .col.box__left {
             width: 100%;
-            max-width: 700px; /* Diperlebar sedikit untuk menampung 2 kolom */
+            max-width: 700px; 
             padding: 40px;
-            flex-shrink: 0; /* Mencegah kolom menyusut */
+            flex-shrink: 0; 
         }
 
-        /* Sembunyikan kolom kanan (gambar) */
         .register-page .col.box__right {
             display: none;
         }
         
-        /* --- STYLE UNTUK FORM 2 KOLOM (BARU) --- */
-        
-        /* Container untuk dua kolom form */
         .register-page .form-grid {
             display: flex;
-            gap: 25px; /* Jarak antara kolom kiri dan kanan */
+            gap: 25px; 
         }
 
-        /* Masing-masing kolom form */
         .register-page .form-col-left,
         .register-page .form-col-right {
-            flex: 1; /* Membuat kedua kolom memiliki lebar yang sama */
+            flex: 1; 
         }
 
-        /* Mengatur margin untuk form agar terlihat rapi */
         .register-page .box__left-form {
             padding: 0;
         }
 
-        /* Menghilangkan margin bawah dari grup form terakhir di setiap kolom agar rapi */
         .register-page .form-col .box__left-form-group:last-child {
             margin-bottom: 0;
         }
@@ -159,9 +147,27 @@ if (isset($_POST['register'])) {
     letter-spacing: 0.5px;
     box-shadow: var(--shadow-md);
 }
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #047857 0%, var(--success) 100%);
+}
+
+.btn-fail {
+    background: linear-gradient(135deg, var(--danger) 0%, #ef4444 100%);
+    color: white;
+}
+
+.btn-fail:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, var(--danger) 100%);
+}
     </style>
 </head>
-<body class="register-page"> <!-- Tambahkan class untuk scope CSS -->
+<body class="register-page"> 
 
     <?php if ($success) : ?>
 <div class="alert">
@@ -195,9 +201,7 @@ if (isset($_POST['register'])) {
 
                 <div class="box__left-form">
                     <form action="" method="post">
-                        <!-- CONTAINER UNTUK DUA KOLOM FORM -->
                         <div class="form-grid">
-                            <!-- KOLOM KIRI (4 Field Pertama) -->
                             <div class="form-col-left form-col">
                                 <div class="box__left-form-group">
                                     <div class="input-form">
@@ -224,7 +228,6 @@ if (isset($_POST['register'])) {
                                 </div>
                             </div>
                             
-                            <!-- KOLOM KANAN (3 Field Sisanya) -->
                             <div class="form-col-right form-col">
                                 <div class="box__left-form-group">
                                     <div class="input-form">
@@ -245,9 +248,7 @@ if (isset($_POST['register'])) {
                                 </div>
                             </div>
                         </div>
-                        <!-- AKHIR DARI CONTAINER 2 KOLOM -->
 
-                        <!-- ELEMEN FULL-WIDTH DI BAWAH FORM -->
                         <div class="box__left-form-group">
                             <button type="submit" name="register" class="btn-login mt-1">Daftar</button>
                         </div>

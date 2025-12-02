@@ -7,7 +7,6 @@ requireRole('Pelanggan');
 $or_number = $_GET['or_cs_number'];
 $data = query("SELECT * FROM tb_order_cs WHERE or_cs_number = '$or_number'")[0];
 
-// VALIDASI: Pelanggan hanya bisa cetak order miliknya
 if ($data['id_pelanggan'] != $_SESSION['user_id']) {
     header('Location: ' . url('403.php'));
     exit;
@@ -110,9 +109,10 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
 <body>
     <div class="nota">
         <div class="header">
-            <h1>🧺 LAUNDRY KAMI</h1>
-            <p>Jl. Contoh No. 123, Bandung</p>
-            <p>Telp: 0812-3456-7890</p>
+            <img src="/assets/img/logo/logo.png" alt="logo laundry kami" style="width: 100px;">
+            <h1>LAUNDRY KAMI </h1>
+            <p>Cirebon, Jawa Barat</p>
+            <p>Telp: 0123-456-789</p>
             <div class="status-badge">BELUM DIBAYAR</div>
         </div>
 
@@ -186,7 +186,7 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             font-size: 16px;
             cursor: pointer;
             font-weight: bold;
-        ">🖨️ Cetak Nota</button>
+        ">Cetak Nota</button>
         <button onclick="window.close()" style="
             background: #6b7280;
             color: white;

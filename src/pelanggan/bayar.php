@@ -3,14 +3,11 @@ session_start();
 require_once __DIR__ . '/../../_functions.php';
 require_once __DIR__ . '/../../_auth.php';
 
-// Hanya pelanggan yang bisa akses
 requireRole('Pelanggan');
 
-// Ambil data user yang sedang login
  $user = getCurrentUser();
  $id_pelanggan = $user['id'];
 
-// --- TENTUKAN TIPE ORDER DARI URL ---
  $tipe_order = '';
  $no_order = '';
  $order_data = null;
@@ -29,7 +26,6 @@ if (isset($_GET['or_ck_number'])) {
     $query = "SELECT * FROM tb_order_cs WHERE or_cs_number = '$no_order' AND id_pelanggan = '$id_pelanggan'";
 }
 
-// Jika tidak ada parameter atau order tidak ditemukan, redirect
 if (!$tipe_order || !$query) {
     header('Location: ' . url('pelanggan/order_saya.php?error=not_found'));
     exit;
@@ -37,14 +33,12 @@ if (!$tipe_order || !$query) {
 
  $result = mysqli_query($koneksi, $query);
 if (mysqli_num_rows($result) !== 1) {
-    // Keamanan: pastikan order ini benar-benar milik user yang login
     header('Location: ' . url('pelanggan/order_saya.php?error=not_found'));
     exit;
 }
 
  $order_data = mysqli_fetch_assoc($result);
 
-// --- PROSES PEMBAYARAN ---
  $success_message = '';
  $error_message = '';
 
@@ -55,7 +49,6 @@ if (isset($_POST['bayar'])) {
     if ($nominal_bayar < $total_tagihan) {
         $error_message = "Nominal pembayaran kurang!";
     } else {
-        // Siapkan data untuk fungsi transaksi
         $data_transaksi = [
             'or_number' => $no_order,
             'pelanggan' => $order_data['nama_pel_ck'] ?? $order_data['nama_pel_dc'] ?? $order_data['nama_pel_cs'],
@@ -74,7 +67,6 @@ if (isset($_POST['bayar'])) {
             'keterangan' => $order_data['keterangan_ck'] ?? $order_data['keterangan_dc'] ?? $order_data['keterangan_cs']
         ];
 
-        // Panggil fungsi transaksi yang sudah ada di _functions.php
         $transaksi_sukses = false;
         switch ($tipe_order) {
             case 'ck': $transaksi_sukses = transaksi_ck($data_transaksi); break;
@@ -83,11 +75,9 @@ if (isset($_POST['bayar'])) {
         }
 
         if ($transaksi_sukses) {
-            // Jika transaksi berhasil, hapus dari tabel order aktif
             $delete_query = "DELETE FROM tb_order_{$tipe_order} WHERE or_{$tipe_order}_number = '$no_order'";
             mysqli_query($koneksi, $delete_query);
 
-            // Redirect ke halaman order dengan pesan sukses
             header('Location: ' . url('pelanggan/order_saya.php?status=success'));
             exit;
         } else {
@@ -102,7 +92,7 @@ if (isset($_POST['bayar'])) {
 <head>
     <title>Pembayaran Order | Laundry Kami</title>
     <link rel="stylesheet" href="<?= url('assets/css/style.css') ?>">
-    <link rel="stylesheet" href="<?= url('assets/css/login.css') ?>"> <!-- Boleh juga pakai style.css utama -->
+    <link rel="stylesheet" href="<?= url('assets/css/login.css') ?>"> 
 </head>
 <body>
     <div class="container" style="max-width: 600px; margin-top: 50px;">

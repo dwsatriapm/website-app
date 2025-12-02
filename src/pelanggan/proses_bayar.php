@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../_functions.php';
 require_once __DIR__ . '/../_auth.php';
 
-// Hanya pelanggan yang bisa akses halaman ini
 requireRole('Pelanggan');
 
 if (!isset($_POST['tipe_order']) || !isset($_POST['no_order']) || !isset($_POST['nominal_bayar'])) {
@@ -11,11 +10,10 @@ if (!isset($_POST['tipe_order']) || !isset($_POST['no_order']) || !isset($_POST[
 }
 
  $id_pelanggan = $_SESSION['user_id'];
- $tipe_order = $_POST['tipe_order']; // ck, dc, atau cs
+ $tipe_order = $_POST['tipe_order']; 
  $no_order = mysqli_real_escape_string($koneksi, $_POST['no_order']);
  $nominal_bayar = (int)$_POST['nominal_bayar'];
 
-// Tentukan tabel dan kolom berdasarkan tipe order
 switch ($tipe_order) {
     case 'ck':
         $table_order = 'tb_order_ck';
@@ -37,12 +35,10 @@ switch ($tipe_order) {
         exit;
 }
 
-// --- VERIFIKASI KEAMANAN: PASTIKAN INI ORDER MILIK USER YANG SEDANG LOGIN ---
  $query = "SELECT * FROM $table_order WHERE $col_no_order = '$no_order' AND id_pelanggan = '$id_pelanggan'";
  $result = mysqli_query($koneksi, $query);
 
 if (mysqli_num_rows($result) !== 1) {
-    // Jika order tidak ditemukan atau bukan milik user, hentikan proses
     die("Akses ditolak: Order tidak valid.");
 }
 
@@ -54,10 +50,8 @@ if ($nominal_bayar < $total_tagihan) {
     exit;
 }
 
-// --- PROSES PEMBAYARAN ---
  $kembalian = $nominal_bayar - $total_tagihan;
 
-// Siapkan data untuk fungsi transaksi
  $data_transaksi = [
     'or_number' => $no_order,
     'pelanggan' => $order_data['nama_pel_ck'] ?? $order_data['nama_pel_dc'] ?? $order_data['nama_pel_cs'],
@@ -76,7 +70,6 @@ if ($nominal_bayar < $total_tagihan) {
     'keterangan' => $order_data['keterangan_ck'] ?? $order_data['keterangan_dc'] ?? $order_data['keterangan_cs']
 ];
 
-// Panggil fungsi transaksi yang sudah ada
  $transaksi_sukses = false;
 switch ($tipe_order) {
     case 'ck': $transaksi_sukses = transaksi_ck($data_transaksi); break;
@@ -85,7 +78,6 @@ switch ($tipe_order) {
 }
 
 if ($transaksi_sukses) {
-    // Jika transaksi berhasil, hapus order dari tabel order aktif
     $delete_query = "DELETE FROM $table_order WHERE $col_no_order = '$no_order'";
     mysqli_query($koneksi, $delete_query);
     

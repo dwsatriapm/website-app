@@ -5,7 +5,6 @@ require_once('../_header_pelanggan.php');
 $or_number = $_GET['or_number'];
 $data = query("SELECT * FROM tb_riwayat_cs WHERE or_number = '$or_number'")[0];
 
-// VALIDASI: Pelanggan hanya bisa lihat riwayat miliknya
 if ($data['id_pelanggan'] != $user['id']) {
     header('Location: ' . url('403.php'));
     exit;
@@ -20,9 +19,6 @@ if ($data['id_pelanggan'] != $user['id']) {
                     <h2 class="judul-md">Detail Riwayat Transaksi</h2>
                     <p class="judul-sm">No Order: <?= $data['or_number'] ?></p>
                 </div>
-                <div class="col-header txt-right">
-                    <a href="<?= url('pelanggan/riwayat_saya.php') ?>" class="btn-xs bg-transparent">← Kembali</a>
-                </div>
             </div>
         </div>
 
@@ -30,7 +26,7 @@ if ($data['id_pelanggan'] != $user['id']) {
             <div class="col mt-2">
                 <div class="card-md">
                     <div class="card-title">
-                        <h2>Informasi Transaksi - Cuci Komplit</h2>
+                        <h2>Informasi Transaksi - Cuci Satuan</h2>
                     </div>
                     <div class="card-body">
                         <table class="tabel-detail">
@@ -111,12 +107,9 @@ if ($data['id_pelanggan'] != $user['id']) {
                             <div class="buttons">
                                 <a href="<?= url('pelanggan/riwayat_order/cetak_riwayat_cs.php?or_number=' . $data['or_number']) ?>" 
                                    class="btn-sm bg-primary" style="color: white;" target="_blank">
-                                    🖨️ Cetak Bukti Pembayaran
+                                    Cetak Bukti Pembayaran
                                 </a>
-                                <a href="<?= url('pelanggan/riwayat_saya.php') ?>" 
-                                   class="btn-sm bg-secondary" style="color: white;">
-                                    ← Kembali ke Riwayat
-                                </a>
+                                <a class="btn-sm bg-transparent" href="<?= url('pelanggan/riwayat_saya.php') ?>"> Kembali ke Riwayat</a>
                             </div>
                         </div>
                     </div>
@@ -150,8 +143,5 @@ if ($data['id_pelanggan'] != $user['id']) {
 }
 </style>
 
-<footer>
-    <p>&copy; 2025 Laundry Kami. All rights reserved.</p>
-</footer>
 </body>
 </html>

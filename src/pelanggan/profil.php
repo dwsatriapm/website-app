@@ -8,14 +8,12 @@ $data_pelanggan = getPelangganById($id_pelanggan);
 $success = '';
 $error = '';
 
-// Update profil
 if (isset($_POST['update_profil'])) {
     $nama = htmlspecialchars($_POST['nama_lengkap']);
     $email = htmlspecialchars($_POST['email']);
     $no_telp = htmlspecialchars($_POST['no_telp']);
     $alamat = htmlspecialchars($_POST['alamat']);
     
-    // Cek email duplikat (kecuali email sendiri)
     $check_email = query("SELECT * FROM tb_pelanggan WHERE email = '$email' AND id_pelanggan != '$id_pelanggan'");
     if (count($check_email) > 0) {
         $error = 'Email sudah digunakan pengguna lain!';
@@ -31,14 +29,13 @@ if (isset($_POST['update_profil'])) {
             $success = 'Profil berhasil diperbarui!';
             $_SESSION['user_nama'] = $nama;
             $_SESSION['user_email'] = $email;
-            $data_pelanggan = getPelangganById($id_pelanggan); // Refresh data
+            $data_pelanggan = getPelangganById($id_pelanggan); 
         } else {
             $error = 'Gagal memperbarui profil!';
         }
     }
 }
 
-// Ganti password
 if (isset($_POST['ganti_password'])) {
     $password_lama = $_POST['password_lama'];
     $password_baru = $_POST['password_baru'];
@@ -95,7 +92,6 @@ if (isset($_POST['ganti_password'])) {
         </div>
 
         <div class="baris">
-            <!-- FORM UPDATE PROFIL -->
             <div class="col mt-2">
                 <div class="card">
                     <div class="card-title">
@@ -139,7 +135,6 @@ if (isset($_POST['ganti_password'])) {
                 </div>
             </div>
 
-            <!-- FORM GANTI PASSWORD -->
             <div class="col mt-2">
                 <div class="card">
                     <div class="card-title">

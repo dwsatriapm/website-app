@@ -1,20 +1,18 @@
 <?php
- $page_title = "Order Saya";
+$page_title = "Order Saya";
 require_once('_header_pelanggan.php');
 
- $id_pelanggan = $user['id'];
+$id_pelanggan = $user['id'];
 
-// --- AMBIL SEMUA DATA (AKTIF + RIWAYAT) ---
-// (Logika yang sama dengan dashboard)
- $order_ck = query("SELECT 'CK' as tipe, id_order_ck as id, or_ck_number as no_order, nama_pel_ck as nama, jenis_paket_ck as paket, berat_qty_ck as qty, 'Kg' as satuan, tot_bayar as total, tgl_masuk_ck as tgl_masuk, tgl_keluar_ck as tgl_keluar, 'Menunggu Pembayaran' as status FROM tb_order_ck WHERE id_pelanggan = '$id_pelanggan'");
- $order_dc = query("SELECT 'DC' as tipe, id_order_dc as id, or_dc_number as no_order, nama_pel_dc as nama, jenis_paket_dc as paket, berat_qty_dc as qty, 'Kg' as satuan, tot_bayar as total, tgl_masuk_dc as tgl_masuk, tgl_keluar_dc as tgl_keluar, 'Menunggu Pembayaran' as status FROM tb_order_dc WHERE id_pelanggan = '$id_pelanggan'");
- $order_cs = query("SELECT 'CS' as tipe, id_order_cs as id, or_cs_number as no_order, nama_pel_cs as nama, jenis_paket_cs as paket, jml_pcs as qty, 'Pcs' as satuan, tot_bayar as total, tgl_masuk_cs as tgl_masuk, tgl_keluar_cs as tgl_keluar, 'Menunggu Pembayaran' as status FROM tb_order_cs WHERE id_pelanggan = '$id_pelanggan'");
+$order_ck = query("SELECT 'CK' as tipe, id_order_ck as id, or_ck_number as no_order, nama_pel_ck as nama, jenis_paket_ck as paket, berat_qty_ck as qty, 'Kg' as satuan, tot_bayar as total, tgl_masuk_ck as tgl_masuk, tgl_keluar_ck as tgl_keluar, 'Menunggu Pembayaran' as status FROM tb_order_ck WHERE id_pelanggan = '$id_pelanggan'");
+$order_dc = query("SELECT 'DC' as tipe, id_order_dc as id, or_dc_number as no_order, nama_pel_dc as nama, jenis_paket_dc as paket, berat_qty_dc as qty, 'Kg' as satuan, tot_bayar as total, tgl_masuk_dc as tgl_masuk, tgl_keluar_dc as tgl_keluar, 'Menunggu Pembayaran' as status FROM tb_order_dc WHERE id_pelanggan = '$id_pelanggan'");
+$order_cs = query("SELECT 'CS' as tipe, id_order_cs as id, or_cs_number as no_order, nama_pel_cs as nama, jenis_paket_cs as paket, jml_pcs as qty, 'Pcs' as satuan, tot_bayar as total, tgl_masuk_cs as tgl_masuk, tgl_keluar_cs as tgl_keluar, 'Menunggu Pembayaran' as status FROM tb_order_cs WHERE id_pelanggan = '$id_pelanggan'");
 
- $riwayat_ck = query("SELECT 'CK' as tipe, id_ck as id, or_number as no_order, pelanggan as nama, j_paket as paket, berat as qty, 'Kg' as satuan, total, tgl_msk as tgl_masuk, tgl_klr as tgl_keluar, status FROM tb_riwayat_ck WHERE id_pelanggan = '$id_pelanggan'");
- $riwayat_dc = query("SELECT 'DC' as tipe, id_dc as id, or_number as no_order, pelanggan as nama, j_paket as paket, berat as qty, 'Kg' as satuan, total, tgl_msk as tgl_masuk, tgl_klr as tgl_keluar, status FROM tb_riwayat_dc WHERE id_pelanggan = '$id_pelanggan'");
- $riwayat_cs = query("SELECT 'CS' as tipe, id_cs as id, or_number as no_order, pelanggan as nama, j_paket as paket, jml_pcs as qty, 'Pcs' as satuan, total, tgl_msk as tgl_masuk, tgl_klr as tgl_keluar, status FROM tb_riwayat_cs WHERE id_pelanggan = '$id_pelanggan'");
+$riwayat_ck = query("SELECT 'CK' as tipe, id_ck as id, or_number as no_order, pelanggan as nama, j_paket as paket, berat as qty, 'Kg' as satuan, total, tgl_msk as tgl_masuk, tgl_klr as tgl_keluar, status FROM tb_riwayat_ck WHERE id_pelanggan = '$id_pelanggan'");
+$riwayat_dc = query("SELECT 'DC' as tipe, id_dc as id, or_number as no_order, pelanggan as nama, j_paket as paket, berat as qty, 'Kg' as satuan, total, tgl_msk as tgl_masuk, tgl_klr as tgl_keluar, status FROM tb_riwayat_dc WHERE id_pelanggan = '$id_pelanggan'");
+$riwayat_cs = query("SELECT 'CS' as tipe, id_cs as id, or_number as no_order, pelanggan as nama, j_paket as paket, jml_pcs as qty, 'Pcs' as satuan, total, tgl_msk as tgl_masuk, tgl_klr as tgl_keluar, status FROM tb_riwayat_cs WHERE id_pelanggan = '$id_pelanggan'");
 
- $semua_order = array_merge($order_ck, $order_dc, $order_cs, $riwayat_ck, $riwayat_dc, $riwayat_cs);
+$semua_order = array_merge($order_ck, $order_dc, $order_cs, $riwayat_ck, $riwayat_dc, $riwayat_cs);
 usort($semua_order, function ($a, $b) {
     $dateA = $a['tgl_masuk'];
     $dateB = $b['tgl_masuk'];
@@ -22,7 +20,6 @@ usort($semua_order, function ($a, $b) {
 });
 ?>
 
-<!-- PERBAIKAN: Notifikasi dengan gaya yang sama -->
 <?php if (isset($_GET['status']) && $_GET['status'] == 'success') : ?>
     <div class="alert">
         <div class="box">
@@ -103,7 +100,7 @@ usort($semua_order, function ($a, $b) {
                                                 font-weight: 600;
                                                 font-size: 12px;
                                             ">
-                                                            <?= $order['tipe'] == 'CK' ? 'Cuci Komplit' : ($order['tipe'] == 'DC' ? 'Dry Clean' : 'Cuci Satuan') ?>
+                                                        <?= $order['tipe'] == 'CK' ? 'Cuci Komplit' : ($order['tipe'] == 'DC' ? 'Dry Clean' : 'Cuci Satuan') ?>
                                                     </span>
                                                 </td>
                                                 <td><?= $order['paket'] ?></td>
@@ -113,7 +110,6 @@ usort($semua_order, function ($a, $b) {
                                                 <td><?= date('d/m/Y', strtotime($order['tgl_keluar'])) ?></td>
                                                 <td>
                                                     <?php
-                                                    // Tampilkan status dengan class yang sesuai
                                                     $status_class = 'status-pending';
                                                     if ($order['status'] === 'Sukses' || $order['status'] === 'Lunas') {
                                                         $status_class = 'status-lunas';
@@ -125,31 +121,27 @@ usort($semua_order, function ($a, $b) {
                                                 </td>
                                                 <td align="center">
                                                     <?php
-                                                    // Tentukan URL detail
                                                     if ($order['status'] === 'Menunggu Pembayaran') {
-    // Jika belum bayar → Akses halaman pelanggan
-    if ($order['tipe'] == 'CK') {
-        $detail_url = url('pelanggan/detail_order/detail_ck.php?or_ck_number=' . $order['no_order']);
-    } elseif ($order['tipe'] == 'DC') {
-        $detail_url = url('pelanggan/detail_order/detail_dc.php?or_dc_number=' . $order['no_order']);
-    } else {
-        $detail_url = url('pelanggan/detail_order/detail_cs.php?or_cs_number=' . $order['no_order']);
-    }
-} else {
-    // Jika sudah bayar (Sukses/Lunas) → Akses riwayat pelanggan
-    if ($order['tipe'] == 'CK') {
-        $detail_url = url('pelanggan/riwayat_order/detail_riwayat_ck.php?or_number=' . $order['no_order']);
-    } elseif ($order['tipe'] == 'DC') {
-        $detail_url = url('pelanggan/riwayat_order/detail_riwayat_dc.php?or_number=' . $order['no_order']);
-    } else {
-        $detail_url = url('pelanggan/riwayat_order/detail_riwayat_cs.php?or_number=' . $order['no_order']);
-    }
-}
-?>
+                                                        if ($order['tipe'] == 'CK') {
+                                                            $detail_url = url('pelanggan/detail_order/detail_ck.php?or_ck_number=' . $order['no_order']);
+                                                        } elseif ($order['tipe'] == 'DC') {
+                                                            $detail_url = url('pelanggan/detail_order/detail_dc.php?or_dc_number=' . $order['no_order']);
+                                                        } else {
+                                                            $detail_url = url('pelanggan/detail_order/detail_cs.php?or_cs_number=' . $order['no_order']);
+                                                        }
+                                                    } else {
+                                                        if ($order['tipe'] == 'CK') {
+                                                            $detail_url = url('pelanggan/riwayat_order/detail_riwayat_ck.php?or_number=' . $order['no_order']);
+                                                        } elseif ($order['tipe'] == 'DC') {
+                                                            $detail_url = url('pelanggan/riwayat_order/detail_riwayat_dc.php?or_number=' . $order['no_order']);
+                                                        } else {
+                                                            $detail_url = url('pelanggan/riwayat_order/detail_riwayat_cs.php?or_number=' . $order['no_order']);
+                                                        }
+                                                    }
+                                                    ?>
 
                                                     <a href="<?= $detail_url ?>" class="btn btn-detail">Detail</a>
 
-                                                    <!-- Tombol Bayar hanya muncul jika status "Menunggu Pembayaran" -->
                                                     <?php if ($order['status'] === 'Menunggu Pembayaran') : ?>
                                                         <button class="btn btn-cetak" onclick="tampilkanModalPembayaran('<?= strtolower($order['tipe']) ?>', '<?= $order['no_order'] ?>', '<?= $order['total'] ?>')">
                                                             Bayar
@@ -175,7 +167,6 @@ usort($semua_order, function ($a, $b) {
     </div>
 </div>
 
-<!-- HTML Modal -->
 <div id="modalPembayaran" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -198,7 +189,6 @@ usort($semua_order, function ($a, $b) {
     </div>
 </div>
 
-<!-- CSS dan JavaScript Modal -->
 <style>
     .modal {
         display: none;
@@ -227,13 +217,25 @@ usort($semua_order, function ($a, $b) {
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
     @keyframes slideIn {
-        from { transform: translateY(-50px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .modal-header,
@@ -313,13 +315,13 @@ usort($semua_order, function ($a, $b) {
         document.getElementById('kembalian').value = 'Rp. ' + kembalian.toLocaleString('id-ID');
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const nominalInput = document.getElementById('nominal_bayar');
         if (nominalInput) {
             nominalInput.addEventListener('input', hitungKembalian);
         }
 
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             const modal = document.getElementById('modalPembayaran');
             if (event.target == modal) {
                 tutupModalPembayaran();
@@ -329,4 +331,5 @@ usort($semua_order, function ($a, $b) {
 </script>
 
 </body>
+
 </html>

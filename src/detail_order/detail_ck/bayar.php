@@ -2,7 +2,6 @@
 require_once('../../_functions.php');
 require_once('../../_auth.php');
 
-// Cek apakah user sudah login
 if (!isLoggedIn()) {
     header('Location: ' . url('login.php'));
     exit;
@@ -12,7 +11,6 @@ $user = getCurrentUser();
 $nomor_or = $_GET['or_ck_number'];
 $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$nomor_or'")[0];
 
-// VALIDASI: Pelanggan hanya bisa bayar order miliknya sendiri
 if (hasRole('Pelanggan')) {
     if ($data['id_pelanggan'] != $user['id']) {
         header('Location: ' . url('403.php'));

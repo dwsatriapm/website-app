@@ -1538,7 +1538,6 @@ span.ov_tgl {
 	transform: translateY(-2px);
 }
 
-/* Style untuk Status Tambahan */
 .status-lunas {
     background-color: rgba(16, 185, 129, 0.1);
     color: var(--success);

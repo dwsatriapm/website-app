@@ -2,7 +2,6 @@
 require_once('_functions.php');
 require_once(__DIR__ . '/_auth.php');
 
-// Proteksi: Hanya Admin/Karyawan
 requireRole(['Admin', 'Karyawan']);
 
 $user = getCurrentUser();
@@ -28,7 +27,6 @@ $user = getCurrentUser();
 			</div>
 			<ul class="nav-menu">
 				<li>
-					<!-- GANTI INI -->
 					<span id="judul-sm">Halo! <?= $user['nama'] ?> (<?= $user['role'] ?>)</span>
 					<ul class="dropdown-menu">
 						<li><a href="<?= url('logout.php') ?>">Logout</a></li>
@@ -40,7 +38,6 @@ $user = getCurrentUser();
 			<a href="<?= url('dashboard.php') ?>" class="link-nav">Dashboard</a>
 			<a href="<?= url('riwayat_transaksi/riwayat.php') ?>" class="link-nav">Riwayat Transaksi</a>
 
-			<!-- HANYA ADMIN YANG BISA MANAGE KARYAWAN -->
 
 			<?php if (hasRole('Admin')) : ?>
 				<a href="<?= url('karyawan/karyawan.php') ?>" class="link-nav">Manage Karyawan</a>

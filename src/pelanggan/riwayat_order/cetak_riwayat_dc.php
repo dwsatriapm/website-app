@@ -7,7 +7,6 @@ requireRole('Pelanggan');
 $or_number = $_GET['or_number'];
 $data = query("SELECT * FROM tb_riwayat_dc WHERE or_number = '$or_number'")[0];
 
-// VALIDASI: Pelanggan hanya bisa cetak riwayat miliknya
 if ($data['id_pelanggan'] != $_SESSION['user_id']) {
     header('Location: ' . url('403.php'));
     exit;
@@ -121,9 +120,10 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
 <body>
     <div class="nota">
         <div class="header">
-            <h1>🧺 LAUNDRY KAMI</h1>
-            <p>Jl. Contoh No. 123, Bandung</p>
-            <p>Telp: 0812-3456-7890</p>
+            <img src="/assets/img/logo/logo.png" alt="logo laundry kami" style="width: 100px;">
+            <h1>LAUNDRY KAMI </h1>
+            <p>Cirebon, Jawa Barat</p>
+            <p>Telp: 0123-456-789</p>
             <p style="margin-top: 10px; font-weight: bold;">BUKTI PEMBAYARAN</p>
         </div>
 
@@ -203,7 +203,7 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             <div>
                 <p style="margin-bottom: 5px;">Kasir</p>
                 <div class="signature-line"></div>
-                <p style="margin-top: 5px;">(.....................)</p>
+                <p style="margin-top: 5px;">(.............)</p>
             </div>
         </div>
 
@@ -225,7 +225,7 @@ if ($data['id_pelanggan'] != $_SESSION['user_id']) {
             cursor: pointer;
             font-weight: bold;
             margin-right: 10px;
-        ">🖨️ Cetak Bukti</button>
+        ">Cetak Bukti</button>
         <button onclick="window.close()" style="
             background: #6b7280;
             color: white;

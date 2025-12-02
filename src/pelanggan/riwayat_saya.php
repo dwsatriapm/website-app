@@ -4,7 +4,6 @@ require_once('_header_pelanggan.php');
 
 $id_pelanggan = $user['id'];
 
-// Ambil riwayat transaksi pelanggan (sudah dibayar)
 $riwayat_ck = query("SELECT 'CK' as tipe, id_ck as id, or_number as no_order, pelanggan as nama, j_paket as paket, berat as qty, 'Kg' as satuan, total, nominal_byr, kembalian, status, tgl_msk, tgl_klr FROM tb_riwayat_ck WHERE id_pelanggan = '$id_pelanggan' ORDER BY id_ck DESC");
 
 $riwayat_dc = query("SELECT 'DC' as tipe, id_dc as id, or_number as no_order, pelanggan as nama, j_paket as paket, berat as qty, 'Kg' as satuan, total, nominal_byr, kembalian, status, tgl_msk, tgl_klr FROM tb_riwayat_dc WHERE id_pelanggan = '$id_pelanggan' ORDER BY id_dc DESC");

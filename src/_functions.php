@@ -605,11 +605,6 @@ function del_riwayat_cs($id_cs)
     return mysqli_affected_rows($koneksi);
 }
 
-// ==========================================
-// FUNGSI AUTHENTICATION & AUTHORIZATION
-// ==========================================
-
-// Login untuk Admin & Karyawan
 function loginStaff($username, $password) {
     global $koneksi;
     
@@ -622,7 +617,6 @@ function loginStaff($username, $password) {
         $user = mysqli_fetch_assoc($result);
         
         if (password_verify($password, $user['password'])) {
-            // Set session
             $_SESSION['user_id'] = $user['id_user'];
             $_SESSION['user_nama'] = $user['nama'];
             $_SESSION['user_username'] = $user['username'];
@@ -637,7 +631,6 @@ function loginStaff($username, $password) {
     return false;
 }
 
-// Login untuk Pelanggan
 function loginPelanggan($username, $password) {
     global $koneksi;
     
@@ -650,7 +643,6 @@ function loginPelanggan($username, $password) {
         $user = mysqli_fetch_assoc($result);
         
         if (password_verify($password, $user['password'])) {
-            // Set session
             $_SESSION['user_id'] = $user['id_pelanggan'];
             $_SESSION['user_nama'] = $user['nama_lengkap'];
             $_SESSION['user_username'] = $user['username'];
@@ -665,7 +657,6 @@ function loginPelanggan($username, $password) {
     return false;
 }
 
-// Register Pelanggan Baru
 function registerPelanggan($data) {
     global $koneksi;
     
@@ -677,7 +668,6 @@ function registerPelanggan($data) {
     $password = $data['password'];
     $confirm_password = $data['confirm_password'];
     
-    // Validasi
     if ($password !== $confirm_password) {
         return ['success' => false, 'message' => 'Password tidak cocok!'];
     }
@@ -686,22 +676,18 @@ function registerPelanggan($data) {
         return ['success' => false, 'message' => 'Password minimal 6 karakter!'];
     }
     
-    // Cek username sudah ada
     $check_username = mysqli_query($koneksi, "SELECT * FROM tb_pelanggan WHERE username = '$username'");
     if (mysqli_num_rows($check_username) > 0) {
         return ['success' => false, 'message' => 'Username sudah digunakan!'];
     }
     
-    // Cek email sudah ada
     $check_email = mysqli_query($koneksi, "SELECT * FROM tb_pelanggan WHERE email = '$email'");
     if (mysqli_num_rows($check_email) > 0) {
         return ['success' => false, 'message' => 'Email sudah terdaftar!'];
     }
     
-    // Hash password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
-    // Insert ke database
     $query = "INSERT INTO tb_pelanggan (nama_lengkap, email, no_telp, alamat, username, password, status) 
               VALUES ('$nama', '$email', '$no_telp', '$alamat', '$username', '$hashed_password', 'active')";
     
@@ -712,7 +698,6 @@ function registerPelanggan($data) {
     return ['success' => false, 'message' => 'Gagal mendaftar. Coba lagi.'];
 }
 
-// Get Pelanggan by ID
 function getPelangganById($id) {
     global $koneksi;
     $id = mysqli_real_escape_string($koneksi, $id);

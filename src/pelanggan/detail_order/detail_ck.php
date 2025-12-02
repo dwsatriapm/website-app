@@ -5,7 +5,6 @@ require_once('../_header_pelanggan.php');
 $or_number = $_GET['or_ck_number'];
 $data = query("SELECT * FROM tb_order_ck WHERE or_ck_number = '$or_number'")[0];
 
-// VALIDASI: Pelanggan hanya bisa lihat order miliknya
 if ($data['id_pelanggan'] != $user['id']) {
     header('Location: ' . url('403.php'));
     exit;
@@ -19,9 +18,6 @@ if ($data['id_pelanggan'] != $user['id']) {
                 <div class="col-header">
                     <h2 class="judul-md">Detail Order</h2>
                     <p class="judul-sm">No Order: <?= $data['or_ck_number'] ?></p>
-                </div>
-                <div class="col-header txt-right">
-                    <a href="<?= url('pelanggan/order_saya.php') ?>" class="btn-xs bg-transparent">← Kembali</a>
                 </div>
             </div>
         </div>
@@ -85,14 +81,15 @@ if ($data['id_pelanggan'] != $user['id']) {
                         </table>
 
                         <div class="form-footer" style="margin-top: 30px;">
+                            <a class="btn-sm bg-transparent" href="<?= url('pelanggan/order_saya.php') ?>"> Kembali</a>
                             <div class="buttons">
                                 <a href="<?= url('detail_order/detail_ck/bayar.php?or_ck_number=' . $data['or_ck_number']) ?>" 
                                    class="btn-sm bg-success" style="color: white;">
-                                    💳 Bayar Sekarang
+                                    Bayar Sekarang
                                 </a>
                                 <a href="<?= url('pelanggan/detail_order/cetak_ck.php?or_ck_number=' . $data['or_ck_number']) ?>" 
                                    class="btn-sm bg-primary" style="color: white;" target="_blank">
-                                    🖨️ Cetak Nota
+                                    Cetak Nota
                                 </a>
                             </div>
                         </div>
@@ -125,10 +122,19 @@ if ($data['id_pelanggan'] != $user['id']) {
     border-radius: 6px;
     font-weight: 600;
 }
-</style>
+.bg-success {
+    background: var(--success);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+}
 
-<footer>
-    <p>&copy; 2025 Laundry Kami. All rights reserved.</p>
-</footer>
+.bg-success:hover {
+	background-color: #10b981;
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-md);
+}
+</style>
 </body>
 </html>
