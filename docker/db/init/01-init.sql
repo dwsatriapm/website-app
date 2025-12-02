@@ -29,9 +29,9 @@ CREATE TABLE `master` (
   `email` varchar(100) NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `level` varchar(20) DEFAULT NULL,
+  `level` enum('Admin','Karyawan') NOT NULL DEFAULT 'Karyawan',
   PRIMARY KEY (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `master` (
 
 LOCK TABLES `master` WRITE;
 /*!40000 ALTER TABLE `master` DISABLE KEYS */;
-INSERT INTO `master` VALUES (4,'Admin','admin@mail.com','admin','$2y$10$mi.Q/r6k5TFricaNcyr4y.3hm0qsFQeOWZEhXhJoN0h3W/bDQC/1m','Admin'),(11,'Karyawan1','karyawan1@mail.com','karyawan1','$2y$10$rBG6s0gdPJDrNU9NXNxsAOGNIKDZAS..15cUo/i5xieIbcw2gxa1e','Karyawan'),(13,'pram','pram@admin.co','pram','$2y$10$eeTGpysyBF/17V0D80slE.WL4fJAHRFG6Qwf77pKEUVpWeE9/mQzq','Karyawan');
+INSERT INTO `master` VALUES (4,'Admin','admin@mail.com','admin','$2y$10$mi.Q/r6k5TFricaNcyr4y.3hm0qsFQeOWZEhXhJoN0h3W/bDQC/1m','Admin'),(13,'pram','pram@staff.co','pram','$2y$10$eeTGpysyBF/17V0D80slE.WL4fJAHRFG6Qwf77pKEUVpWeE9/mQzq','Karyawan'),(17,'faqih','faqih@staff.co','faqih','$2y$10$PgPDnxgk2m4Dc1SfH6lZUurh/CcqHgUJHD8HMjbM84gWVj.1Cujt6','Karyawan'),(18,'adimas','adimas@staff.co','adimas','$2y$10$chuxvce/pLAO7TGWQHCnI..4v.brPnDMm22kEKiRtwQUY2XxKcIgK','Karyawan'),(19,'nabil','nabil@staff.co','nabil','$2y$10$brlRggWcf78l3g44qJu0g..IgxMDGElspMCz5UItqxV.w4THe5haa','Karyawan');
 /*!40000 ALTER TABLE `master` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,6 +135,7 @@ DROP TABLE IF EXISTS `tb_order_ck`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_order_ck` (
   `id_order_ck` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pelanggan` int(11) DEFAULT NULL,
   `or_ck_number` varchar(10) DEFAULT NULL,
   `nama_pel_ck` varchar(100) NOT NULL,
   `no_telp_ck` char(13) NOT NULL,
@@ -147,8 +148,9 @@ CREATE TABLE `tb_order_ck` (
   `tgl_keluar_ck` date NOT NULL,
   `tot_bayar` double DEFAULT NULL,
   `keterangan_ck` text NOT NULL,
-  PRIMARY KEY (`id_order_ck`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id_order_ck`),
+  KEY `idx_pelanggan` (`id_pelanggan`)
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,7 +159,6 @@ CREATE TABLE `tb_order_ck` (
 
 LOCK TABLES `tb_order_ck` WRITE;
 /*!40000 ALTER TABLE `tb_order_ck` DISABLE KEYS */;
-INSERT INTO `tb_order_ck` VALUES (33,'CK-6925801','1','1','1','Cuci Komplit Reguler','2 Hari',1,80000,'2025-11-25','2025-11-25',80000,'1'),(36,'CK-692AC1C','test bayar','test bayar','test bayar','Cuci Komplit Reguler','2 Hari',7,80000,'2025-11-29','2025-11-29',560000,'test bayar');
 /*!40000 ALTER TABLE `tb_order_ck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,6 +171,7 @@ DROP TABLE IF EXISTS `tb_order_cs`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_order_cs` (
   `id_order_cs` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pelanggan` int(11) DEFAULT NULL,
   `or_cs_number` varchar(10) NOT NULL,
   `nama_pel_cs` varchar(100) NOT NULL,
   `no_telp_cs` varchar(13) NOT NULL,
@@ -182,8 +184,9 @@ CREATE TABLE `tb_order_cs` (
   `tgl_keluar_cs` date NOT NULL,
   `tot_bayar` double NOT NULL,
   `keterangan_cs` text NOT NULL,
-  PRIMARY KEY (`id_order_cs`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id_order_cs`),
+  KEY `idx_pelanggan` (`id_pelanggan`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +195,6 @@ CREATE TABLE `tb_order_cs` (
 
 LOCK TABLES `tb_order_cs` WRITE;
 /*!40000 ALTER TABLE `tb_order_cs` DISABLE KEYS */;
-INSERT INTO `tb_order_cs` VALUES (11,'CS-692587C','3','3','3','Boneka Besar','1 Hari',3,20000,'2025-11-25','2025-11-25',60000,'3'),(13,'CS-692AC1F','test bayar','test bayar','test bayar','Selimut','1 Hari',8,20000,'2025-11-29','2025-11-29',160000,'test bayar\r\n');
 /*!40000 ALTER TABLE `tb_order_cs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,6 +207,7 @@ DROP TABLE IF EXISTS `tb_order_dc`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_order_dc` (
   `id_order_dc` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pelanggan` int(11) DEFAULT NULL,
   `or_dc_number` varchar(10) NOT NULL,
   `nama_pel_dc` varchar(100) NOT NULL,
   `no_telp_dc` varchar(13) NOT NULL,
@@ -217,8 +220,9 @@ CREATE TABLE `tb_order_dc` (
   `tgl_keluar_dc` date NOT NULL,
   `tot_bayar` double NOT NULL,
   `keterangan_dc` text NOT NULL,
-  PRIMARY KEY (`id_order_dc`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id_order_dc`),
+  KEY `idx_pelanggan` (`id_pelanggan`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,8 +231,41 @@ CREATE TABLE `tb_order_dc` (
 
 LOCK TABLES `tb_order_dc` WRITE;
 /*!40000 ALTER TABLE `tb_order_dc` DISABLE KEYS */;
-INSERT INTO `tb_order_dc` VALUES (11,'DC-69258A3','1','1','1','Cuci Kering Reguler','2 Hari',1,6000,'2025-11-25','2025-11-25',6000,'1'),(13,'DC-692AC1E','test bayar','test bayar','test bayar','Cuci Kering Express','5 Jam',9,15000,'2025-11-29','2025-11-29',135000,'test bayar');
 /*!40000 ALTER TABLE `tb_order_dc` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_pelanggan`
+--
+
+DROP TABLE IF EXISTS `tb_pelanggan`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_pelanggan` (
+  `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_lengkap` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `no_telp` varchar(15) NOT NULL,
+  `alamat` text NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `foto_profil` varchar(255) DEFAULT NULL,
+  `status` enum('active','inactive') DEFAULT 'active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id_pelanggan`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_pelanggan`
+--
+
+LOCK TABLES `tb_pelanggan` WRITE;
+/*!40000 ALTER TABLE `tb_pelanggan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_pelanggan` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -240,6 +277,7 @@ DROP TABLE IF EXISTS `tb_riwayat_ck`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_riwayat_ck` (
   `id_ck` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pelanggan` int(11) DEFAULT NULL,
   `or_number` varchar(20) NOT NULL,
   `pelanggan` varchar(100) NOT NULL,
   `no_telp` char(15) NOT NULL,
@@ -255,8 +293,9 @@ CREATE TABLE `tb_riwayat_ck` (
   `kembalian` int(11) NOT NULL,
   `status` varchar(20) NOT NULL,
   `keterangan` text NOT NULL,
-  PRIMARY KEY (`id_ck`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id_ck`),
+  KEY `idx_pelanggan` (`id_pelanggan`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,6 +316,7 @@ DROP TABLE IF EXISTS `tb_riwayat_cs`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_riwayat_cs` (
   `id_cs` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pelanggan` int(11) DEFAULT NULL,
   `or_number` varchar(20) DEFAULT NULL,
   `pelanggan` varchar(100) DEFAULT NULL,
   `no_telp` char(15) DEFAULT NULL,
@@ -292,8 +332,9 @@ CREATE TABLE `tb_riwayat_cs` (
   `kembalian` int(11) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `keterangan` text DEFAULT NULL,
-  PRIMARY KEY (`id_cs`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id_cs`),
+  KEY `idx_pelanggan` (`id_pelanggan`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -314,6 +355,7 @@ DROP TABLE IF EXISTS `tb_riwayat_dc`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tb_riwayat_dc` (
   `id_dc` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pelanggan` int(11) DEFAULT NULL,
   `or_number` varchar(20) DEFAULT NULL,
   `pelanggan` varchar(100) DEFAULT NULL,
   `no_telp` char(15) DEFAULT NULL,
@@ -329,8 +371,9 @@ CREATE TABLE `tb_riwayat_dc` (
   `kembalian` int(11) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `keterangan` text DEFAULT NULL,
-  PRIMARY KEY (`id_dc`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id_dc`),
+  KEY `idx_pelanggan` (`id_pelanggan`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -351,4 +394,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-30  3:37:48
+-- Dump completed on 2025-12-02  8:05:08
